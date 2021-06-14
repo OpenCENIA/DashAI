@@ -1,0 +1,180 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de LSTM deben ser alguno(s) de ['activation', 'batch', 'dense_dim', 'dropout', 'epochs', 'optimizer', 'lstm_dim', 'verbose'].",
+    "description": "LSTM es una red neuronal recurrente, que tiene memoria para procesar secuencias de inputs. Esta propiedad le da un comportamiento dinámico, y es muy utilizado en reconocimiento de patrones temporales y de lenguaje.",
+    "properties": {
+        "activation": {
+            "oneOf": [
+                {
+                    "default": "relu",
+                    "error_msg": "El parámetro 'activation' debe ser una de ['relu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh', 'selu', 'elu', 'exponential'].",
+                    "description": "El parámetro 'activation' se refiere a la función de activación que se utiliza en la primera capa densa. Debe ser una de ['relu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh', 'selu', 'elu', 'exponential'].",
+                    "type": "string",
+                    "enum": ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+                },
+                {
+                    "items": {
+                        "default": "relu",
+                        "error_msg": "El parámetro 'activation' debe ser una de ['relu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh', 'selu', 'elu', 'exponential'].",
+                        "description": "El parámetro 'activation' se refiere a la función de activación que se utiliza en la primera capa densa. Debe ser una de ['relu', 'sigmoid', 'softmax', 'softplus', 'softsign', 'tanh', 'selu', 'elu', 'exponential'].",
+                        "type": "string",
+                        "enum": ["relu", "sigmoid", "softmax", "softplus", "softsign", "tanh", "selu", "elu", "exponential"]
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "batch": {
+            "oneOf": [
+                {
+                    "default": 64,
+                    "error_msg": "El parámetro 'batch' debe ser de tipo integer mayor o igual a 1.",
+                    "description": "El parámetro 'batch' es el tamaño del batch al entrenar. Debe ser de tipo integer mayor o igual a 1.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                {
+                    "items": {
+                        "default": 64,
+                        "error_msg": "El parámetro 'batch' debe ser de tipo integer mayor o igual a 1.",
+                        "description": "El parámetro 'batch' es el tamaño del batch al entrenar. Debe ser de tipo integer mayor o igual a 1.",
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "dense_dim": {
+            "oneOf": [
+                {
+                    "default": 64,
+                    "error_msg": "El parámetro 'dense_dim' debe ser un entero positivo.",
+                    "description": "El parámetro 'dense_dim' es la dimensión de la primera capa densa. Debe ser un entero positivo.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                {
+                    "items": {
+                        "default": 64,
+                        "error_msg": "El parámetro 'dense_dim' debe ser un entero positivo.",
+                        "description": "El parámetro 'dense_dim' es la dimensión de la primera capa densa. Debe ser un entero positivo.",
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "dropout": {
+            "oneOf": [
+                {
+                    "default": 0.5,
+                    "error_msg": "El parámetro 'dropout' debe ser de tipo number, en el intervalo [0, 1).",
+                    "description": "El parámetro 'dropout' es la proporción de las conexiones botadas en la primera capa densa al momento de entrenar. Debe ser de tipo number, en el intervalo [0, 1).",
+                    "type": "number",
+                    "minimum": 0,
+                    "exclusiveMinimum": 1
+                },
+                {
+                    "items": {
+                        "default": 0.5,
+                        "error_msg": "El parámetro 'dropout' debe ser de tipo number, en el intervalo [0, 1).",
+                        "description": "El parámetro 'dropout' es la proporción de las conexiones botadas en la primera capa densa al momento de entrenar. Debe ser de tipo number, en el intervalo [0, 1).",
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "epochs": {
+            "oneOf": [
+                {
+                    "default": 200,
+                    "error_msg": "El parámetro 'epochs' debe ser de tipo integer positivo.",
+                    "description": "El parámetro 'epochs' es el número de épocas (iteraciones) con las que se entrenará. Debe ser de tipo integer positivo.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                {
+                    "items": {
+                        "default": 200,
+                        "error_msg": "El parámetro 'epochs' debe ser de tipo integer positivo.",
+                        "description": "El parámetro 'epochs' es el número de épocas (iteraciones) con las que se entrenará. Debe ser de tipo integer positivo.",
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "optimizer": {
+            "oneOf": [
+                {
+                    "default": "adam",
+                    "error_msg": "El parámetro 'optimizer' debe ser uno de ['sgd', 'rmsprop', 'adam', 'adadelta', 'adagrad', 'adamax', 'nadam', 'ftrl'].",
+                    "description": "El parámetro 'optimizer' es el optimizador utilizado al entrenar la red. Debe ser uno de ['sgd', 'rmsprop', 'adam', 'adadelta', 'adagrad', 'adamax', 'nadam', 'ftrl'].",
+                    "type": "string",
+                    "enum": ["sgd", "rmsprop", "adam", "adadelta", "adagrad", "adamax", "nadam", "ftrl"]
+                },
+                {
+                    "items": {
+                        "default": "adam",
+                        "error_msg": "El parámetro 'optimizer' debe ser uno de ['sgd', 'rmsprop', 'adam', 'adadelta', 'adagrad', 'adamax', 'nadam', 'ftrl'].",
+                        "description": "El parámetro 'optimizer' es el optimizador utilizado al entrenar la red. Debe ser uno de ['sgd', 'rmsprop', 'adam', 'adadelta', 'adagrad', 'adamax', 'nadam', 'ftrl'].",
+                        "type": "string",
+                        "enum": ["sgd", "rmsprop", "adam", "adadelta", "adagrad", "adamax", "nadam", "ftrl"]
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "lstm_dim": {
+            "oneOf": [
+                {
+                    "default": 128,
+                    "error_msg": "El parámetro 'lstm_dim' debe ser de tipo integer par positivo mayor o igual a 4.",
+                    "description": "El parámetro 'lstm_dim' es la dimensión de la primera capa LSTM. La segunda capa LSTM tiene dimensión igual a la mitad de la primera capa. Debe ser de tipo integer par positivo mayor o igual a 4.",
+                    "type": "integer",
+                    "minimum": 4,
+                    "multipleOf": 2
+                },
+                {
+                    "items": {
+                        "default": 128,
+                        "error_msg": "El parámetro 'lstm_dim' debe ser de tipo integer par positivo mayor o igual a 4.",
+                        "description": "El parámetro 'lstm_dim' es la dimensión de la primera capa LSTM. La segunda capa LSTM tiene dimensión igual a la mitad de la primera capa. Debe ser de tipo integer par positivo mayor o igual a 4.",
+                        "type": "integer",
+                        "minimum": 4,
+                        "multipleOf": 2
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "verbose": {
+            "oneOf": [
+                {
+                    "default": 0,
+                    "error_msg": "El parámetro 'verbose' debe tener valor 0, 1 o 2.",
+                    "description": "El parámetro 'verbose' debe tener valor 0, 1 o 2.",
+                    "type": "integer",
+                    "enum": [0, 1, 2]
+                },
+                {
+                    "items": {
+                        "default": 0,
+                        "error_msg": "El parámetro 'verbose' debe tener valor 0, 1 o 2.",
+                        "description": "El parámetro 'verbose' debe tener valor 0, 1 o 2.",
+                        "type": "integer",
+                        "enum": [0, 1, 2]
+                    },
+                    "type": "array"
+                }
+            ]
+        }
+    },
+    "type": "object"
+}

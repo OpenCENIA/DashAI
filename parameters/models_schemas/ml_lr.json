@@ -1,0 +1,468 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de ML_LR deben ser alguno(s) de ['penalty', 'dual', 'tol', 'C', 'fit_intercept', 'intercept_scaling', 'l1_ratio', 'random_state', 'solver', 'max_iter', 'verbose', 'warm_start'].",
+    "description": "Logistic Regression, los parámetros deben ser alguno(s) de ['penalty', 'dual', 'tol', 'C', 'fit_intercept', 'intercept_scaling', 'l1_ratio', 'random_state', 'solver', 'max_iter', 'verbose', 'warm_start'].",
+    "properties": {
+        "C": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'C' debe ser de tipo number positivo.",
+                    "description": "El parámetro 'C' debe ser de tipo number positivo, indica el valor de la regularización.",
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "default": 1
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'C' debe ser de tipo number positivo.",
+                        "description": "El parámetro 'C' debe ser de tipo number positivo, indica el valor de la regularización.",
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "default": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "dual": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'dual' debe ser de tipo boolean.",
+                    "description": "Formulación dual o primal, la formulación dual sólo es implementada para penalización l2 con liblinear solver. Éste parámetro debe ser de tipo boolean.",
+                    "type": "boolean",
+                    "default": false
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'dual' debe ser de tipo boolean.",
+                        "description": "Formulación dual o primal, la formulación dual sólo es implementada para penalización l2 con liblinear solver. Éste parámetro debe ser de tipo boolean.",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "fit_intercept": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'fit_intercept' debe ser de tipo boolean.",
+                    "description": "Especifica si una constante debe ser agregada a la función de decisión. El parámetro 'fit_intercept' debe ser de tipo boolean.",
+                    "type": "boolean",
+                    "default": true
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'fit_intercept' debe ser de tipo boolean.",
+                        "description": "Especifica si una constante debe ser agregada a la función de decisión. El parámetro 'fit_intercept' debe ser de tipo boolean.",
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "intercept_scaling": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'intercept_scaling' debe ser de tipo float positivo.",
+                    "description": "Solo es útil cuando solver es liblinear y self.fit_intercep es True. Éste parámetro debe ser de tipo float positivo.",
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "default": 1
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'intercept_scaling' debe ser de tipo float positivo.",
+                        "description": "Solo es útil cuando solver es liblinear y self.fit_intercep es True. Éste parámetro debe ser de tipo float positivo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "default": 1
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "l1_ratio": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'l1_ratio' debe ser de tipo number en el intervalo [0, 1].",
+                    "description": "Sólo es usado si penalty='elasticnet'. El parámetro 'l1_ratio' debe ser de tipo number en el intervalo [0, 1].",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": null
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'l1_ratio' debe ser de tipo number en el intervalo [0, 1].",
+                        "description": "Sólo es usado si penalty='elasticnet'. El parámetro 'l1_ratio' debe ser de tipo number en el intervalo [0, 1].",
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "default": null
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "max_iter": {
+            "oneOf": [
+                {
+                    "exclusiveMinimum": 0,
+                    "error_msg": "El parámetro 'max_iter' debe ser de tipo integer positivo.",
+                    "description": "Máximo número de iteraciones para el algoritmo converga. El parámetro 'max_iter' debe ser de tipo integer positivo.",
+                    "type": "integer",
+                    "default": 100
+                },
+                {
+                    "items": {
+                        "exclusiveMinimum": 0,
+                        "error_msg": "El parámetro 'max_iter' debe ser de tipo integer positivo.",
+                        "description": "Máximo número de iteraciones para el algoritmo converga. El parámetro 'max_iter' debe ser de tipo integer positivo.",
+                        "type": "integer",
+                        "default": 100
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "penalty": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'penalty' debe ser 'l1', 'l2', 'elasticnet' o 'none'.",
+                    "description": "Este valor indica la norma que se utiliza en la penalización. El parámetro 'penalty' debe ser 'l1', 'l2', 'elasticnet' o 'none'.",
+                    "type": "string",
+                    "enum": ["l1", "l2", "elasticnet", "none"],
+                    "default": "l2"
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'penalty' debe ser 'l1', 'l2', 'elasticnet' o 'none'.",
+                        "description": "Este valor indica la norma que se utiliza en la penalización. El parámetro 'penalty' debe ser 'l1', 'l2', 'elasticnet' o 'none'.",
+                        "type": "string",
+                        "enum": ["l1", "l2", "elasticnet", "none"],
+                        "default": "l2"
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "random_state": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'random_state' debe ser un entero mayor o igual a 0.",
+                    "description": "El parámetro 'random_state' debe ser un entero mayor o igual a 0.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": null
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'random_state' debe ser un entero mayor o igual a 0.",
+                        "description": "El parámetro 'random_state' debe ser un entero mayor o igual a 0.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": null
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "solver": {
+            "oneOf": [
+                {
+                    "enum": ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
+                    "error_msg": "El parámetro 'solver' debe ser 'newton-cg', 'lbfgs', 'liblinear', 'sag' o 'saga'.",
+                    "description": "Indica el algoritmo a utilizar en el problema de optimización. El parámetro 'solver' debe ser 'newton-cg', 'lbfgs', 'liblinear', 'sag' o 'saga'.",
+                    "type": "string",
+                    "default": "lbfgs"
+                },
+                {
+                    "items": {
+                        "enum": ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
+                        "error_msg": "El parámetro 'solver' debe ser 'newton-cg', 'lbfgs', 'liblinear', 'sag' o 'saga'.",
+                        "description": "Indica el algoritmo a utilizar en el problema de optimización. El parámetro 'solver' debe ser 'newton-cg', 'lbfgs', 'liblinear', 'sag' o 'saga'.",
+                        "type": "string",
+                        "default": "lbfgs"
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "tol": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'tol' debe ser de tipo number positivo.",
+                    "description": "Tolerancia para criterio de parada. El parámetro 'tol' debe ser de tipo number positivo.",
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "default": 0.0001
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'tol' debe ser de tipo number positivo.",
+                        "description": "Tolerancia para criterio de parada. El parámetro 'tol' debe ser de tipo number positivo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "default": 0.0001
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "verbose": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'verbose' debe ser de tipo integer positivo.",
+                    "description": "El parámetro 'verbose' debe ser de tipo integer positivo.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 0
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'verbose' debe ser de tipo integer positivo.",
+                        "description": "El parámetro 'verbose' debe ser de tipo integer positivo.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 0
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "warm_start": {
+            "oneOf": [
+                {
+                    "type": "boolean",
+                    "error_msg": "El parámetro 'warm_start' debe ser de tipo boolean.",
+                    "description": "El parámetro 'warm_start' debe ser de tipo boolean.",
+                    "default": false
+                },
+                {
+                    "items": {
+                        "type": "boolean",
+                        "error_msg": "El parámetro 'warm_start' debe ser de tipo boolean.",
+                        "description": "El parámetro 'warm_start' debe ser de tipo boolean.",
+                        "default": false
+                    },
+                    "type": "array"
+                }
+            ]
+        }
+    },
+    "type": "object",
+    "allOf": [
+        {
+            "if": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "string",
+                                "enum": ["newton-cg", "lbfgs", "sag"]
+                                }
+                            }
+                        },
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "array",
+                                "contains": {
+                                    "type": "string",
+                                    "enum": ["newton-cg", "lbfgs", "sag"]
+                                    }
+                            }
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "penalty": {
+                                "type": "string",
+                                "enum": ["l2", "none"],
+                                "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."                
+                            }
+                        }
+                    },
+                    {
+                        "properties": {
+                            "penalty": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": ["l2", "none"],
+                                    "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."                    
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "if": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "penalty": {
+                                "type": "string",
+                                "const": "elasticnet"
+                                }
+                            }
+                        },
+                {
+                    "properties": {
+                        "penalty": {
+                            "type": "array",
+                            "contains": {
+                                "type": "string",
+                                "const": "elasticnet"
+                                }
+                        }
+                    }
+                }]
+            },
+            "then": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "string",
+                                "const": "saga",
+                                "error_msg": "La penalty 'elasticnet' solo sirve con el solver 'saga'."
+                            }
+                        }
+                    },
+                    {
+                        "properties": {
+                            "penalty": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "const": "saga",
+                                    "error_msg": "La penalty 'elasticnet' solo sirve con el solver 'saga'."
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "if": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "penalty": {
+                                "type": "string",
+                                "const": "none"
+                                }
+                            }
+                        },
+                {
+                    "properties": {
+                        "penalty": {
+                            "type": "array",
+                            "contains": {
+                                "type": "string",
+                                "const": "none"
+                                }
+                        }
+                    }
+                }]
+            },
+            "then": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "string",
+                                "enum": ["newton-cg", "lbfgs", "sag", "saga"],
+                                "error_msg": "La penalty 'none' no puede ser usada con el solver 'liblinear'."
+                            }
+                        }
+                    },
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": ["newton-cg", "lbfgs", "sag", "saga"],
+                                    "error_msg": "La penalty 'none' no puede ser usada con el solver 'liblinear'."
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "if": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "dual": {
+                                "type": "boolean",
+                                "const": true
+                                }
+                            }
+                        },
+                {
+                    "properties": {
+                        "dual": {
+                            "type": "array",
+                            "contains": {
+                                "type": "boolean",
+                                "const": true
+                                }
+                        }
+                    }
+                }]
+            },
+            "then": {
+                "oneOf": [
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "string",
+                                "const": "liblinear",
+                                "error_msg": "La formulación dual solo puede ser utilizada con solver 'liblinear' y penalty 'l2'."
+                            },
+                            "penalty": {
+                                "type": "string",
+                                "const": "l2",
+                                "error_msg": "La formulación dual solo puede ser utilizada con solver 'liblinear' y penalty 'l2'."
+                            }
+                        }
+                    },
+                    {
+                        "properties": {
+                            "solver": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "const": "liblinear",
+                                    "error_msg": "La formulación dual solo puede ser utilizada con solver 'liblinear' y penalty 'l2'."
+                                }
+                            },
+                            "penalty": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "const": "l2",
+                                    "error_msg": "La formulación dual solo puede ser utilizada con solver 'liblinear' y penalty 'l2'."
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

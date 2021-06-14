@@ -1,0 +1,45 @@
+version: "3.3"
+
+services:
+  api:
+    build: .
+    command: python3 app.py
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - broker
+    environment: 
+      BROKER_URL: amqp://user:password@broker:5672/
+      DB_URL: "db+postgresql://db_user:db_password@db:5432/db"
+
+  worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.gpu
+    command: python3 -m celery -A worker worker -l INFO
+    environment: 
+      BROKER_URL: amqp://user:password@broker:5672/
+      DB_URL: "db+postgresql://db_user:db_password@db:5432/db"
+    volumes:
+      - .:/code
+    runtime: nvidia
+
+  broker:
+    image: rabbitmq
+    environment: 
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+  db:
+    image: postgres
+    environment: 
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

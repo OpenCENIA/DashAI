@@ -1,0 +1,6 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de Distil_emb son nulos.",
+    "description": "Vectorizador de tipo embedding.",
+    "type": "object"
+}

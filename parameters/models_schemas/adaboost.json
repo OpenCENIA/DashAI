@@ -1,0 +1,103 @@
+{
+   
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de AB deben ser alguno(s) de ['n_estimators', 'learning_rate', 'algorithm'].",
+    "description": " Adaboost es un machine learning meta-algorithm, este algoritmo da prioridad a los elementos mal clasificados. Los parámetros de AB deben ser alguno(s) de ['n_estimators', 'learning_rate', 'algorithm'].",
+    "properties": {
+        "algorithm": {
+            "oneOf": [
+                {
+                    "description": "El parámetro 'algorithm' debe ser 'SAMME' o 'SAMME.R', si la opción es SAMME entonces se está utilizando el algoritmo de impulso discreto 'SAMME'. Si la opción es 'SAMME.R' entonces se utiliza el algoritmo de impulso real 'SAMME.R'.",
+                    "error_msg": "El parámetro 'algorithm' debe ser 'SAMME' o 'SAMME.R'.",
+                    "type": "string",
+                    "enum": ["SAMME", "SAMME.R"],
+                    "default": "SAMME.R"
+                },
+                {
+                    "items": {
+                        "description": "El parámetro 'algorithm' debe ser 'SAMME' o 'SAMME.R', si la opción es SAMME entonces se está utilizando el algoritmo de impulso discreto 'SAMME'. Si la opción es 'SAMME.R' entonces se utiliza el algoritmo de impulso real 'SAMME.R'.",
+                        "error_msg": "El parámetro 'algorithm' debe ser 'SAMME' o 'SAMME.R'.",
+                        "type": "string",
+                        "enum": ["SAMME", "SAMME.R"],
+                        "default": "SAMME.R"
+                    },
+                    "type":"array"
+
+                }
+
+            ]
+        },
+
+        "learning_rate": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'learning_rate' debe ser de tipo number positivo.",
+                    "description":  "El parámetro 'learning_rate' debe ser de tipo number positivo. Indica la contribución de cada clasificador.",
+                    "type": "number",
+                    "default": 0.1,
+                    "exclusiveMinimum": 0
+                },
+                {
+                    "items": {
+                        "error_msg":  "El parámetro 'learning_rate' debe ser de tipo number positivo.",
+                        "description":  "El parámetro 'learning_rate' debe ser de tipo number positivo. Indica la contribución de cada clasificador.",
+                        "type": "number",
+                        "default": 0.1,
+                        "exclusiveMinimum": 0
+                    },
+                    "type":"array"
+
+                }
+
+            ]
+        },
+
+        "n_estimators": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'n_estimators' debe ser de tipo integer mayor o igual a 1.",
+                    "description": "El parámetro 'n_estimators' debe ser de tipo integer mayor o igual a 1. Indica el número máximo en que el algoritmo termina el 'boosting'. Valor default es 100.",
+                    "type": "integer",
+                    "default": 100 ,
+                    "exclusiveMinimum": 1
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'n_estimators' debe ser de tipo integer mayor o igual a 1.",
+                        "description": "El parámetro 'n_estimators' debe ser de tipo integer mayor o igual a 1. Indica el número máximo en que el algoritmo termina el 'boosting'. Valor default es 100.",
+                        "type": "integer",
+                        "default": 100,
+                        "exclusiveMinimum": 1
+                    },
+                    "type":"array"
+
+                }
+
+            ]
+        },
+
+        "random_state": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'random_state' debe ser un integer mayor o igual a 0.",
+                    "description": "El parámetro 'random_state' debe ser un integer mayor o igual a 0. Controla la semilla en cada 'base_estimator', en cada iteración.",
+                    "type": "number",
+                    "default": 0
+                },
+                {
+                    "items": {
+                        "error_msg": "El parámetro 'random_state' debe ser un integer mayor o igual a 0.",
+                        "description": "El parámetro 'random_state' debe ser un integer mayor o igual a 0. Controla la semilla en cada 'base_estimator', en cada iteración.",
+                        "type": "number",
+                        "default": 0
+                    },
+                    "type":"array"
+    
+                }
+            ]
+        }
+    },
+    "type": "object"
+}
+    
+    

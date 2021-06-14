@@ -1,0 +1,279 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de TFIDF deben ser alguno(s) de ['encoding', 'decode_error', 'strip_accents', 'lowercase', 'ngram_range', 'analyzer', 'max_df', 'min_df', 'max_features', 'binary', 'norm','use_idf', 'smooth_idf', 'sublinear_tf'].",
+    "description": "Vectorizador de tipo Term Frequency - Inverse Document Frequency, los parámetros de TFIDF deben ser alguno(s) de ['encoding', 'decode_error', 'strip_accents', 'lowercase', 'ngram_range', 'analyzer', 'max_df', 'min_df', 'max_features', 'binary', 'norm','use_idf', 'smooth_idf', 'sublinear_tf'].",
+    "properties": {
+        "encoding": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'encoding' debe ser 'utf-8'",
+                        "description": "Decodificación del texto. Default: utf-8. El parámetro 'encoding' debe ser 'utf-8'",
+                        "type": "string",
+                        "enum": ["utf-8"],
+                        "default": "utf-8"
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'encoding' debe ser uno entre 'utf-8'",
+                                "description": "Decodificación del texto. Default: utf-8. El parámetro 'encoding' debe ser 'utf-8'",
+                                "type": "string",
+                                "enum": ["utf-8"],
+                                "default": "utf-8"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "decode_error": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'decode_error' debe ser uno entre 'strict', 'ignore', 'replace'",
+                        "description": "Indica qué hacer si hay un error en la decodificación. Los posibles valores son 'strict', 'ignore' y 'replace'. Default: 'strict'.",
+                        "type": "string",
+                        "enum": ["strict", "ignore", "replace"],
+                        "default": "strict"
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'decode_error' debe ser uno entre 'strict', 'ignore', 'replace'",
+                                "description": "Indica qué hacer si hay un error en la decodificación. Los posibles valores son 'strict', 'ignore' y 'replace'. Default: 'strict'.",
+                                "type": "string",
+                                "enum": ["strict", "ignore", "replace"],
+                                "default": "strict"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "strip_accents": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'strip_accents' debe ser uno entre 'ascii', 'unicode'",
+                        "description": "Remueve acentos durante la normalización. Los posibles valores no nulos son 'ascii' y 'unicode'. Default: None.",
+                        "type": "string",
+                        "enum": ["ascii", "unicode"],
+                        "default": null
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'strip_accents' debe ser uno entre 'ascii', 'unicode'",
+                                "description": "Remueve acentos durante la normalización. Los posibles valores no nulos son 'ascii' y 'unicode'. Default: None.",          
+                                "type": "string",
+                                "enum": ["ascii", "unicode"],
+                                "default": null
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "lowercase": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'lowercase' debe ser booleano",
+                        "description": "Convierte todos los caracteres a minúsculas. Default: True.",
+                        "type": "boolean",
+                        "default": true
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'lowercase' debe ser booleano",
+                                "description": "Convierte todos los caracteres a minúsculas. Default: True.",
+                                "type": "boolean",
+                                "default": true
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "analyzer": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'analyzer' debe ser uno de 'word', 'char', 'char_wb'",
+                        "description": "Indica si los n-gramas debiesen ser de palabras o caracteres, puede ser alguno de 'word', 'char' y 'char_wb'. Default: 'word'.",
+                        "type": "string",
+                        "enum": ["word", "char", "char_wb"],
+                        "default": "word"
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'analyzer' debe ser uno de 'word', 'char', 'char_wb'",
+                                "description": "Indica si los n-gramas debiesen ser de palabras o caracteres, puede ser alguno de 'word', 'char' y 'char_wb'. Default: 'word'.",
+                                "type": "string",
+                                "enum": ["word", "char", "char_wb"],
+                                "default": "word"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "max_df": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'max_df' debe ser real entre 0.0 y 1.0",
+                        "description": "En rango [0, 1]. Cuando se hacen n_gramas ignora los términos que aparecen en los documentos con una frecuencia superior a max_df. Default: 1.",
+                        "type": "number",
+                        "minimum": 0.0,
+                        "default": 1.0
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'max_df' debe ser real entre 0.0 y 1.0",
+                                "description": "En rango [0, 1]. Cuando se hacen n_gramas ignora los términos que aparecen en los documentos con una frecuencia superior a max_df. Default: 1.",
+                                "type": "number",
+                                "minimum": 0.0,
+                                "default": 1.0
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "min_df": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'min_df' debe ser real entre 0.0 y 1.0",
+                        "description": "Análogo a max_df. Ignora términos con frecuencia en documentos menor a min_df. Default: 1.",
+                        "type": "number",
+                        "minimum": 0.0,
+                        "default": 1.0
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'min_df' debe ser real entre 0.0 y 1.0",
+                                "description": "Análogo a max_df. Ignora términos con frecuencia en documentos menor a min_df. Default: 1.",
+                                "type": "number",
+                                "minimum": 0.0,
+                                "default": 1.0
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "max_features": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'max_features' debe ser integer",
+                        "description": "Número máximo de elementos del vocabulario ordenados por frecuencia de términos. Default: None.",
+                        "type": "integer",
+                        "default": null
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'max_features' debe ser integer",
+                                "description": "Número máximo de elementos del vocabulario ordenados por frecuencia de términos. Default: None.",
+                                "type": "integer",
+                                "default": null
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "binary": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'binary' debe ser booleano",
+                        "description": "Si es True, todos los conteos no nulos son seteados iguales a 1. Default: False.",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'binary' debe ser booleano",
+                                "description": "Si es True, todos los conteos no nulos son seteados iguales a 1. Default: False.",
+                                "type": "boolean",
+                                "default": false
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "ngram_range": {
+                      "items": {
+                              "error_msg": "El parámetro 'ngram_range' debe ser array de integers",
+                              "description": "Cota inferior y superior para los rangos de n-gramas utilizados. Ejemplo: (1, 3) considera unigramas, bigramas y trigramas. Default: (1, 1).",
+                              "items": { "error_msg": "Deben ser integer","type":  "integer"},
+                              "type": "array",
+                              "default": [1,1]
+                      },
+                      "type": "array"
+                    },
+        "norm": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'norm' debe ser alguno de 'l1' o 'l2'.",
+                        "description": "Norma que se utilizará. Puede ser 'l1' o 'l2'. Default: 'l2'.",
+                        "type": "string",
+                        "enum": ["l1","l2"],
+                        "default": "l2"
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'norm' debe ser alguno de 'l1' o 'l2'.",
+                                "description": "Norma que se utilizará. Puede ser 'l1' o 'l2'. Default: 'l2'.",
+                                "type": "string",
+                                "enum": ["l1","l2"],
+                                "default": "l2"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "use_idf": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'use_idf' debe ser boolean",
+                        "description": "Habilita reponderación de idf, debe ser un valor booleano. Default: True.",
+                        "type": "boolean",
+                        "default": true
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'use_idf' debe ser boolean",
+                                "description": "Habilita reponderación de idf, debe ser un valor booleano. Default: True.",
+                                "type": "boolean",
+                                "default": true
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "smooth_idf": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'smooth_idf' debe ser boolean",
+                        "description": "Previene divisiones por cero, agregando el elemento base. Default: True.",
+                        "type": "boolean",
+                        "default": true
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'smooth_idf' debe ser boolean",
+                                "description": "Previene divisiones por cero, agregando el elemento base. Default: True.",
+                                "type": "boolean",
+                                "default": true
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "sublinear_tf": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'sublinear_tf' debe ser boolean",
+                        "description": "Aplica escalamiento sublineal al escalamiento tf. Default: False.",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'sublinear_tf' debe ser boolean",
+                                "description": "Aplica escalamiento sublineal al escalamiento tf. Default: False.",
+                                "type": "boolean",
+                                "default": false
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    }
+    },
+    "type": "object"
+}

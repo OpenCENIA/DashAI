@@ -1,0 +1,111 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de CNN deben ser alguno(s) de ['depth', 'activation', 'optimizer', 'verb', 'epochs'].",
+    "description": "Convolutional Neural Network especializada en múltiples etiquetas. Los parámetros de CNN deben ser alguno(s) de ['depth', 'activation', 'optimizer', 'verb', 'epochs'].",
+    "properties": {
+        "activation": {
+                    "oneOf": [
+                      {
+                        "description": "Función de activación a utilizar. Default: sigmoid. El parámetro 'activation' debe ser uno entre 'sigmoid' y 'softmax'.",
+                        "error_msg": "El parámetro 'activation' debe ser uno entre 'sigmoid' y 'softmax'.",
+                        "type": "string",
+                        "enum": ["sigmoid","softmax"],
+                        "default": "sigmoid"
+                      },
+                      {
+                        "items": {
+                          "description": "Función de activación a utilizar. Default: sigmoid. El parámetro 'activation' debe ser uno entre 'sigmoid' y 'softmax'.",
+                          "error_msg": "El parámetro 'activation' debe ser uno entre 'sigmoid' y 'softmax'.",
+                          "type": "string",
+                          "enum": ["sigmoid","softmax"],
+                          "default": "sigmoid"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "depth": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'depth' debe ser de tipo 'integer' positivo, mínimo 1",
+                        "description": "Profundidad de capas neuronales. Default: 512.  Debe ser de tipo 'integer' positivo, mínimo 1.",
+                        "type": "integer",
+                        "default": 512
+                      },
+                      {
+                        "items": {
+                          "error_msg": "El parámetro 'depth' debe ser de tipo 'integer' positivo, mínimo 1",
+                          "description": "Profundidad de capas neuronales. Default: 512.  Debe ser de tipo 'integer' positivo, mínimo 1.",
+                          "type": "integer",
+                          "default": 512
+                        },
+                        "type": "array"
+                      }
+                    ]
+                },
+        "epochs": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'epochs' debe ser de tipo 'integer' positivo, mínimo 1.",
+                        "description": "Épocas de entrenamiento. Default: 100. Éste parámetro debe ser del tipo 'integer' positivo, valor mínimo 1.",
+                        "type": "integer",
+                        "exclusiveMinimum":1,
+                        "default": 100
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'epochs' debe ser de tipo 'integer' positivo, mínimo 1",
+                                "description": "Épocas de entrenamiento. Default: 100. Éste parámetro debe ser del tipo 'integer' positivo, valor mínimo 1.",
+                                "type": "integer",
+                                "exclusiveMinimum":1,
+                                "default": 100
+                        },
+                        "type": "array"
+                      }
+                    ]
+                },
+        "optimizer": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'optimizer' debe ser uno entre 'sgd' 'rmsprop' 'adam' 'adadelta' 'adagrad' 'adamax' 'nadam' 'ftrl'",
+                        "description": "Optimizador de función de costos. Éste parámetro debe ser entre: 'sgd' 'rmsprop' 'adam' 'adadelta' 'adagrad' 'adamax' 'nadam' 'ftrl'. Default: adam.",
+                        "type": "string",
+                        "enum": ["sgd", "rmsprop","adam", "adadelta", "adagrad", "adamax", "nadam", "ftrl"],
+                        "default": "adam"
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'optimizer' debe ser uno entre 'sgd' 'rmsprop' 'adam' 'adadelta' 'adagrad' 'adamax' 'nadam' 'ftrl'",
+                                "description": "Optimizador de función de costos. Éste parámetro debe ser entre: 'sgd' 'rmsprop' 'adam' 'adadelta' 'adagrad' 'adamax' 'nadam' 'ftrl'. Default: adam.",
+                                "type": "string",
+                                "enum": ["sgd", "rmsprop","adam", "adadelta", "adagrad", "adamax", "nadam", "ftrl"],
+                                "default": "adam"
+                        },
+                        "type": "array"
+                      }
+                    ]
+                    },
+        "verb": {
+                    "oneOf": [
+                      {
+                        "error_msg": "El parámetro 'verb' debe ser uno entre 0, 1 y 2",
+                        "description": "Verbose del entrenamiento, debe ser uno entre los valores 0, 1 y 2. Default: 0." ,
+                        "type": "integer",
+                        "enum": [0, 1, 2],
+                        "default": 0
+                      },
+                      {
+                        "items": {
+                                "error_msg": "El parámetro 'verb' debe ser uno entre 0, 1 y 2",
+                                "description": "Verbose del entrenamiento, debe ser uno entre los valores 0, 1 y 2. Default: 0." ,
+                                "type": "integer",
+                                "enum": [0, 1, 2],
+                                "default": 0
+                        },
+                        "type": "array"
+                      }
+                    ]
+                }
+    },
+    "type": "object"
+}
