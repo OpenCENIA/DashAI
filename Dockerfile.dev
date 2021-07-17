@@ -1,8 +1,0 @@
-FROM python:3.8.7
-ENV PYTHONUNBUFFERED=1
-WORKDIR /code
-COPY Pipfile /code/
-COPY Pipfile.lock /code/
-RUN pipenv install
-RUN python -m spacy download es_core_news_sm
-RUN python -c "import nltk;nltk.download('stopwords')"
