@@ -1,5 +1,6 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
+from numpy.lib.polynomial import _polyder_dispatcher
 from .models import Number, Execution
 from Models.classes import *
 from Models.metrics import *
@@ -63,19 +64,18 @@ def run_experiment(request):
             ]
     test_partition = [numpy.array(test_partition[0]), numpy.array(test_partition[1])]
 
-    experiment_name = dataset.get('dataset_name')
+    experiment_name = "Exp_" + datetime.now().strftime("%H:%M:%S")
     dataset_label_atr = request.POST.get('label_atr')
     dataset_doc_atr = request.POST.get('doc_atr')
 
-    results = {}
     for model in models:
         execution = globals().get(model)()
         execution.fit(execution.preprocess(train_partition[0]), train_partition[1])
         
-        results[model] = {}
+        results = {}
         predicted_labels = execution.predict(execution.preprocess(test_partition[0]))
         for metric in metrics:
-            results[model][metric] = globals().get(metric)()(test_partition[1].transpose(), predicted_labels.transpose())
+            results[metric] = globals().get(metric)()(test_partition[1].transpose(), predicted_labels.transpose())
         
         Execution.objects.create(
             experiment_name= experiment_name,
@@ -83,6 +83,7 @@ def run_experiment(request):
             configurations= execution.params,
             results= results
             )
+        print(results)
     
     return redirect('/experimenter')
     

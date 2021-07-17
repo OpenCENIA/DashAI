@@ -10,7 +10,7 @@ class F1(Metric):
         macro = f1_score(y_true, y_pred, average='macro', zero_division=1)
         micro = f1_score(y_true, y_pred, average='micro', zero_division=1)
         weighted = f1_score(y_true, y_pred, average='weighted', zero_division=1)
-        samples = f1_score(y_true, y_pred, average='samples', zero_division=1)
+        #samples = f1_score(y_true, y_pred, average='samples', zero_division=1)
 
         output = {}
         for i in range(len(f1_labels)):
@@ -19,7 +19,7 @@ class F1(Metric):
         output['macro avg'] = macro
         output['micro avg'] = micro
         output['weighted avg'] = weighted
-        output['samples avg'] = samples
+        #output['samples avg'] = samples
 
         return output
 

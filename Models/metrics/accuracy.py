@@ -8,9 +8,10 @@ class Accuracy(Metric):
 
     def apply(self,y_true, y_pred):
         output = {}
-        for i in range(y_true.shape[1]):
-            acc = accuracy_score(y_true[:, i], y_pred[:, i])
-            output[str(i)] = acc
+        if len(y_true.shape) == 2:  # if task is multilabel
+            for i in range(y_true.shape[1]):
+                acc = accuracy_score(y_true[:, i], y_pred[:, i])
+                output[str(i)] = acc
         global_acc = accuracy_score(y_true, y_pred)
         output['global'] = global_acc
 

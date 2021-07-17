@@ -1,6 +1,6 @@
 import csv, json
 
-csvFilePath = "rawTwitterDataset.csv"
+csvFilePath = "Twitter_Data.csv"
 jsonFilePath = "twitterDataset.json"
 
 data = {
@@ -9,12 +9,11 @@ data = {
     'test': []
 }
 
-with open(csvFilePath) as csvFile:
+with open("Twitter_Data.csv", encoding="utf8") as csvFile:
     csvReader = csv.DictReader(csvFile)
     part = 0
     for row in csvReader:
-        actual_row = [int(row["0"]), row["@switchfoot http://twitpic.com/2y1zl - Awww, that's a bummer.  You shoulda got David Carr of Third Day to do it. ;D"]]
-        actual_data = [{'text': actual_row[1], 'label': actual_row[0]}]
+        actual_data = [{'text': row['clean_text'], 'label': int(row['category'])}]
         if part == 0:
             data['train'] += actual_data
         elif part == 1:
