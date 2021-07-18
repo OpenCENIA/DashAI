@@ -1,6 +1,5 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
-from numpy.lib.polynomial import _polyder_dispatcher
 from .models import Number, Execution
 from Models.classes import *
 from Models.metrics import *
@@ -18,72 +17,47 @@ def make_experiment(request):
     return render(request, 'Experimenter/make_experiment.html', {'classes': classes, 'metrics': metrics})
 
 def run_experiment(request):
-    models = []
+
+    dataset = json.loads(request.FILES['dataset'].read())
+
+    train_partition = process_data(dataset.get('train'))
+    val_partition = process_data(dataset.get('val'))
+    test_partition = process_data(dataset.get('test'))
+
+    experiment_name = "Exp_" + datetime.now().strftime("%H:%M:%S")
+
+    experiment_confs = {}
+    experiment_confs['label_conf'] = request.POST.get('label_atr')
+    experiment_confs['doc_conf'] = request.POST.get('doc_atr')
+
+    models = [] # Obtain the name of all selected models
     for model_name in get_available_models():
         if (model_name + "_checkbox") in request.POST:
             models += [request.POST[model_name + "_checkbox"]]
     
-    metrics = []
+    metrics = [] # Obtain the name of all selected metrics
     for metric_name in get_available_metrics():
         if (metric_name + "_checkbox") in request.POST:
             metrics += [request.POST[metric_name + "_checkbox"]]
 
-    dataset = json.loads(request.FILES['dataset'].read())
-    train_partition = [[], []]
-    cont = 0
-    for train_dict in dataset.get('train'):
-        if cont == 10000:
-            break
-        else:
-            cont += 1
-        train_partition = [
-            train_partition[0]+[train_dict.get('text')], 
-            train_partition[1]+[train_dict.get('label')]
-            ]
-    train_partition = [numpy.array(train_partition[0]), numpy.array(train_partition[1])]
-    
-    '''
-    val_partition = [[], []]
-    for val_dict in dataset.get('val'):
-        val_partition = [
-            val_partition[0]+[val_dict.get('text')], 
-            val_partition[1]+[val_dict.get('label')]
-            ]
-    '''
-    
-    test_partition = [[], []]
-    cont = 0
-    for test_dict in dataset.get('test'):
-        if cont == 10000:
-            break
-        else:
-            cont += 1
-        test_partition = [
-            test_partition[0]+[test_dict.get('text')], 
-            test_partition[1]+[test_dict.get('label')]
-            ]
-    test_partition = [numpy.array(test_partition[0]), numpy.array(test_partition[1])]
-
-    experiment_name = "Exp_" + datetime.now().strftime("%H:%M:%S")
-    dataset_label_atr = request.POST.get('label_atr')
-    dataset_doc_atr = request.POST.get('doc_atr')
-
     for model in models:
         execution = globals().get(model)()
         execution.fit(execution.preprocess(train_partition[0]), train_partition[1])
-        
-        results = {}
+
+        model_confs = experiment_confs
+        model_confs['model_conf'] = execution.params
+
+        model_result = {}
         predicted_labels = execution.predict(execution.preprocess(test_partition[0]))
         for metric in metrics:
-            results[metric] = globals().get(metric)()(test_partition[1].transpose(), predicted_labels.transpose())
+            model_result[metric] = globals().get(metric)()(test_partition[1].transpose(), predicted_labels.transpose())
         
         Execution.objects.create(
             experiment_name= experiment_name,
             execution_file= execution.save(),
-            configurations= execution.params,
-            results= results
+            configurations= model_confs,
+            results= model_result
             )
-        print(results)
     
     return redirect('/experimenter')
     
@@ -91,3 +65,13 @@ def run_experiment(request):
 def test(request):
     print(Execution.objects.get(id=1).results)
     return render(request, 'Experimenter/test.html')
+
+def process_data(data_dict):
+    # Dict(Str,Int) -> List(NumpyArray(Str),NumpyArray(Int))
+    # This function takes a dataset dictionary (train, val or test) and
+    # produces a numpy array with de text list and the labels list
+    text_list,labels_list = [], []
+    for example in data_dict:
+        text_list += [example['text']]
+        labels_list += [example['label']]
+    return [numpy.array(text_list), numpy.array(labels_list)]
