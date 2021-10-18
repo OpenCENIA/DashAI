@@ -1,5 +1,6 @@
 from TaskLib.task.taskMain import Task
 from Models.classes import get_available_models
+from sklearn.model_selection import GridSearchCV
 
 class TextTask(Task):
 
@@ -21,16 +22,9 @@ class TextTask(Task):
         return compatible_models
     
     def set_executions(self, models: list, params: list):
-        # TODO use greadSeach, not the model
-        self.executions : list = []
-        for modelName in models:
-            actualExecution = globals().get(modelName)(params[modelName])
-            self.executions.append(actualExecution)
+
+        super().set_executions(models, params)
     
     def run_experiments(self, input_data: dict):
-        # TODO generate a function to parse de input_data
-        for exec in self.executions:
-            # fit the grid
-            # get the results and the parameters
-            pass
-    
+        
+        super().run_experiments(input_data)
