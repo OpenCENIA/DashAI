@@ -1,6 +1,8 @@
 from TaskLib.task.taskMain import Task
+
+globals()["TASK"] = "TEXT"
+
 from Models.classes import get_available_models
-from sklearn.model_selection import GridSearchCV
 
 class TextTask(Task):
 

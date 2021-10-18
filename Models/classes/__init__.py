@@ -16,7 +16,7 @@ for (_, module_name, _) in iter_modules([package_dir]):
             # Add the class to this package's variables
             try:
                 model_name = attribute.MODEL
-                if not model_name in available_models:
+                if not model_name in available_models and globals()["TASK"] in attribute.TASK:
                     available_models += [model_name]
                     globals()[model_name] = attribute
             except:

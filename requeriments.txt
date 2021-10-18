@@ -1,0 +1,4 @@
+django
+sklearn
+tensorflow
+keras
