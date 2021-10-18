@@ -1,5 +1,11 @@
 from abc import ABC,abstractmethod
 from sklearn.model_selection import GridSearchCV
+from Models.classes import *
+import numpy as np
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+# TODO implement classes for tokenizer
 
 class Task(ABC):
     
@@ -7,6 +13,13 @@ class Task(ABC):
     def config(self, params : dict) -> None: 
         """
         This method recieves a dictionary with important parameters of the task.
+        """
+        pass
+    
+    @abstractmethod
+    def get_parameters(self) -> dict:
+        """
+        This method returns a dictionary with all important parameters of the task.
         """
         pass
 
@@ -29,7 +42,7 @@ class Task(ABC):
         self.gridExecutions : list = []
         for i in range(len(models)):
             actualExecution = globals().get(models[i])()
-            grid = GridSearchCV(actualExecution, params[i])
+            grid = GridSearchCV(actualExecution, params[i], cv=2)
             self.gridExecutions.append(grid)
     
     def run_experiments(self, input_data : dict):
@@ -42,15 +55,28 @@ class Task(ABC):
         """
         train_x, train_y, test_x, test_y = parse_input(input_data)
 
+        count_vect = CountVectorizer()
+        count_vect.fit(train_x)
+        count_vect.fit(test_x)
+
+        X_train_counts = count_vect.transform(train_x)
+        X_test_counts = count_vect.transform(test_x)
+ 
+        tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
+        tf_transformer = TfidfTransformer(use_idf=False).fit(X_test_counts)
+
+        prep_train_x = tf_transformer.transform(X_train_counts)
+        prep_test_x = tf_transformer.transform(X_test_counts)
+
         self.experimentResults = {}
 
         for grid in self.gridExecutions:
-            grid.fit(train_x, train_y)
+            grid.fit(prep_train_x, train_y)
 
-            trainResults = grid.best_score
-            testResults = grid.score(test_x, test_y)
-            parameters = grid.best_params      
-            execution = grid.best_estimator
+            trainResults = grid.score(prep_train_x, train_y)
+            testResults = grid.score(prep_test_x, test_y)
+            parameters = grid.best_params_      
+            execution = grid.best_estimator_
             executionBytes = execution.save()
 
             self.experimentResults[execution.MODEL] = {
@@ -62,10 +88,10 @@ class Task(ABC):
     
 
 def parse_input(input_data):
-    
-    x_train = input_data["train"]["x"]
-    y_train = input_data["train"]["y"]
-    x_test = input_data["test"]["x"]
-    y_test = input_data["test"]["y"]
+    #TODO reshape only if input is 1D
+    x_train = np.array(input_data["train"]["x"])
+    y_train = np.array(input_data["train"]["y"])
+    x_test = np.array(input_data["test"]["x"])
+    y_test = np.array(input_data["test"]["y"])
 
     return x_train, y_train, x_test, y_test

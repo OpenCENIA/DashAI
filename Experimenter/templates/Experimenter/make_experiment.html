@@ -7,32 +7,9 @@
     </head>
 
     <body>
-        <form action="run_experiment" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <form action="/experimenter/execute_experiment" method="POST" enctype="multipart/form-data"> {% csrf_token %}
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col">
-                        <div class="row">
-                            <h2>Upload your data</h2>
-                            <p>Only JSON files</p>
-                            <button onclick="document.getElementById('dataset').click()">Choose File</button>
-                            <input type="file" id="dataset" name="dataset" style="display: none;" accept="application/JSON" required>
-                        </div>
-
-                        <div class="row">
-                            <h2>Define the data atributes</h2>
-                            <label for="label_atr">Label atribute:</label>
-                            <select id="label_atr" name="label_atr" required>
-                                <option value="single" selected>Single label</option>
-                                <option value="multi">Multi label</option>
-                            </select>
-
-                            <label for="doc_atr">Document atribute:</label>
-                            <select id="doc_atr" name="doc_atr" required>
-                                <option value="single" selected>Single Instance</option>
-                                <option value="multi">Multi Instance</option>
-                            </select>
-                        </div>
-                    </div>
 
                     <div class="col">
                         <h2>Choose the machine learning models you want to train</h2>
@@ -44,20 +21,6 @@
                             <label class="form-check-label" for="{{class}}_checkbox">{{class}}</label>
                         </div>
                         {% endfor %}
-                    </div>
-
-                    <div class="col">
-                        <div class="row">
-                            <h2>Select the metrics you want to use to assess the trained models</h2>
-                            <p>You can select more than one</p>
-
-                            {% for metric in metrics %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{{metric}}" id="{{metric}}_checkbox" name="{{metric}}_checkbox" checked>
-                                <label class="form-check-label" for="{{metric}}_checkbox">{{metric}}</label>
-                            </div>
-                        {% endfor %}
-                        </div>
 
                         <div class="row">
                             <button type="submit">Run the experiment</button>

@@ -1,25 +1,31 @@
 from TaskLib.task.taskMain import Task
-
-globals()["TASK"] = "TEXT"
-
-from Models.classes import get_available_models
+from Models.classes import *
 
 class TextTask(Task):
 
-    def config(self, params: dict) -> None:
+    def config(self, params : dict) -> None:
         """
         The params dictionary must have LABEL and INSTANCE keys
         """
         self.label : str = params.get("LABEL")
         self.instance : str = params.get("INSTANCE")
     
+    def get_parameters(self) -> dict:
+        params = {}
+
+        params["LABEL"] = self.label
+        params["INSTANCE"] = self.instance
+
+        return params
+    
     def get_compatible_models(self) -> list:
         
         compatible_models : list = []
         for modelName in get_available_models():
             modelClass = globals().get(modelName)
-            if modelClass.INSTANCE == self.instance and modelClass.LABEL == self.label:
-                compatible_models.append(modelName)
+            if "TEXT" in modelClass.TASK:
+                if modelClass.INSTANCE == self.instance and modelClass.LABEL == self.label:
+                    compatible_models.append(modelName)
         
         return compatible_models
     
