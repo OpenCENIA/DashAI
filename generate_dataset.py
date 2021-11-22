@@ -1,26 +1,40 @@
 import csv, json
 
-csvFilePath = "Twitter_Data.csv"
-jsonFilePath = "twitterDataset.json"
+csvFilePath = "Example_dataset/Twitter_Data.csv"
+jsonFilePath = "Example_dataset/twitterDataset.json"
+
+size = 1000
 
 data = {
-    'train': [],
-    'val': [],
-    'test': []
+    'train': {'x':[], 'y':[]},
+    'test': {'x':[], 'y':[]}
 }
 
-with open("Twitter_Data.csv", encoding="utf8") as csvFile:
+with open(csvFilePath, encoding="utf8") as csvFile:
     csvReader = csv.DictReader(csvFile)
-    part = 0
+    c = 0
+    p = 0
     for row in csvReader:
-        actual_data = [{'text': row['clean_text'], 'label': int(row['category'])}]
-        if part == 0:
-            data['train'] += actual_data
-        elif part == 1:
-            data['val'] += actual_data
+        try:
+            actual_data = [row['clean_text'], int(row['category'])]
+        except:
+            continue
+
+        if actual_data[1] == 0:
+            continue
+
+        if c == size:
+            c = 0
+            p += 1
+        if p == 0 :
+            data['train']['x'].append(actual_data[0])
+            data['train']['y'].append(actual_data[1])
+        elif p == 1:
+            data['test']['x'].append(actual_data[0])
+            data['test']['y'].append(actual_data[1])
         else:
-            data['test'] += actual_data
-        part = (part + 1)% 3
+            break
+        c += 1
 
 with open(jsonFilePath, 'w') as jsonFile:
     jsonFile.write(json.dumps(data, indent=4))
