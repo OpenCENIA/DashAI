@@ -1,7 +1,6 @@
 from TaskLib.task.taskMain import Task
 from Models.classes import *
-
-class TextTask(Task):
+class TextClassificationTask(Task):
 
     def config(self, params : dict) -> None:
         """
