@@ -6,7 +6,7 @@ from .models import Execution, Experiment
 #from Models.metrics import *
 
 from TaskLib.task.taskMain import Task
-from TaskLib.task.textTask import TextTask
+from TaskLib.task.textTask import TextClassificationTask
 from Models.classes import *
 
 #from datetime import datetime
@@ -129,7 +129,7 @@ def test(request):
 
 def obtain_task(task_type) -> Task:
     if task_type == "TEXT":
-        return TextTask()
+        return TextClassificationTask()
 
 # def process_data(data_dict):
 #     # Dict(Str,Int) -> List(NumpyArray(Str),NumpyArray(Int))
