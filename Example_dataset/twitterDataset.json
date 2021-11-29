@@ -1,4 +1,11 @@
 {
+    "task_info":{
+        "task_type":"text-classification",
+        "task_parameters": {
+            "LABEL" : "SINGLE",
+            "INSTANCE" : "SINGLE"
+        }
+    },
     "train": {
         "x": [
             "when modi promised \u201cminimum government maximum governance\u201d expected him begin the difficult job reforming the state why does take years get justice state should and not business and should exit psus and temples",
