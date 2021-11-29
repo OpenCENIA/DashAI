@@ -8,6 +8,23 @@ from sklearn.feature_extraction.text import TfidfTransformer
 # TODO implement classes for tokenizer
 
 class Task(ABC):
+
+    @abstractmethod
+    def get_parameters_structure(self) -> dict:
+        """
+        This method provides a dictionary with all the task's configurations,
+        for each parameter, there is a list of posible values and the readable form.
+        The structure is
+        {
+            ...,
+            "param_i": [
+                ...,
+                [name_j, read_form_j],
+                ...
+            ],
+            ...
+        }
+        """
     
     @abstractmethod
     def config(self, params : dict) -> None: 

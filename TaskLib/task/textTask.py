@@ -2,6 +2,23 @@ from TaskLib.task.taskMain import Task
 from Models.classes import *
 class TextClassificationTask(Task):
 
+    def get_parameters_structure(self) -> dict:
+        """
+        The available params are LABEL and INSTANCE, the expected 
+        values for both are SINGLE and MULTI, and the readable form  
+        for both are Single and Multi
+        """
+        structure = {}
+        structure["LABEL"] = [
+            ["SINGLE",'Single'],
+            ["MULTI",'Multi']
+        ]
+        structure["INSTANCE"] = [
+            ["SINGLE",'Single'],
+            ["MULTI",'Multi']
+        ]
+        return structure
+
     def config(self, params : dict) -> None:
         """
         The params dictionary must have LABEL and INSTANCE keys
