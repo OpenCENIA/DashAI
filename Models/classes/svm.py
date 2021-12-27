@@ -24,7 +24,7 @@ class SVM(Model, SVC):
 
     Model: Clase padre de todos los modelos implementados.
     """
-    MODEL = "SVM"
+    MODEL = "svm"
 
     # Task vars
     TASK = ["TEXT"]
