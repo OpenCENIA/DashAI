@@ -1,19 +1,16 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 
-import json
-import dash
-from dash import dcc
-from dash import html
+import json, dash, base64, db
+from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from TaskLib.task import taskMain, textTask
+from TaskLib.task.taskMain import Task
+from TaskLib.task.textClassificationSimpleTask import TextClassificationSimpleTask
+from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTask
 
-import base64
-
-import db
 from models import Experiment, Execution
 
 def parse_contents(contents, filename):
@@ -33,14 +30,16 @@ def parse_contents(contents, filename):
         ])
     return json_file
 
-def get_task(task_type) -> taskMain.Task:
+def get_task(task_type) -> Task:
     """
     Maps the task_type to the corresponding Task object
     """
     #TODO get all available task
     #Similar to model's classes
-    if task_type == "text-classification":
-        return textTask.TextClassificationTask()
+    if task_type == "TextClassificationSimpleTask":
+        return TextClassificationSimpleTask()
+    elif task_type == "TextClassificationMLabelTask":
+        return TextClassificationMLabelTask()
 
 def gen_input(model_name : str, param_name : str, param_json_schema : dict):
     """
@@ -103,7 +102,7 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
 ###################################################################################
 ###################################################################################
 
-app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
 
 app.layout = html.Div([
     dbc.Row([
@@ -183,29 +182,28 @@ app.layout = html.Div([
  
 @app.callback([Output('dataset', 'data'),
     Output('experiment-id', 'data'),
-    Output('available-models', 'data'),
     Output('dataset-info', 'children'),
     Output('executions','options'),
-    Output('execution-config','style'),
-    ],
+    Output('execution-config','style')],
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'))
 def load_dataset(contents, filename):
     """
-    Receive the upload data input and stores in dataset.
+    Receive the upload data input and stores in dataset. 
+    Obtain the available models and shows to the user.
     """
     if contents == None or filename == None:
         raise PreventUpdate
 
     # Get dataset
-    dataset = parse_contents(contents, filename)
-    dataset_info = dataset['task_info']
+    dataset : dict = parse_contents(contents, filename)
+    dataset_info : dict = dataset.get('task_info')
+    task_type : str = dataset_info.get('task_type')
 
-    dataset_information = html.H2(f"Task type: {dataset_info.get('task_type')}")
+    dataset_information = html.H2(f"Task type: {task_type}")
 
     # Create and configure task
-    main_task : taskMain.Task = get_task(dataset_info['task_type'])
-    main_task.config(dataset_info['task_parameters'])
+    main_task : Task = get_task(task_type)
 
     # Add experiment to DB
     exp = Experiment(**dataset_info)
@@ -214,40 +212,26 @@ def load_dataset(contents, filename):
     exp_id = exp.id
 
     # Get and show available models
-    available_models = main_task.get_compatible_models()
-    options=[{'label':model, 'value': model} for model in available_models]
-    #childrens = [html.Label("Select the models to train: ")]
-    #for model in available_models:
-    #    new_children = html.Div(
-    #        id=f'div-execution-{model}',
-    #        children=[
-    #            dcc.Checklist(
-    #                id=f'execution-{model}',
-    #                options=[{'label':model, 'value':model}],
-    #                value=[]
-    #            ),
-    #            html.Button(
-    #                id=f'button-{model}',
-    #                value="hola"
-    #            )
-    #        ]
-    #    )
-    #    childrens.append(new_children)
-    #executions = [Input(f'execution-{model}', 'value') for model in available_models]
+    available_models : list  = main_task.get_compatible_models()
+    options : list = [{'label':model, 'value': model} for model in available_models]
+
     # Make visible the execution-config div
     style = {}
     
-    return dataset, exp_id, available_models, dataset_information, options, {'style':style}
+    return dataset, exp_id, dataset_information, options, {'style':style}
 
 @app.callback(Output('selected-exec', 'options'),
     Output('exec-selection', 'style'),
     Input('executions', 'value'))
 def enable_parameters(executions):
-
+    """
+    Get the selected models, and load a dropdown list to select any and 
+    configure its parameters.
+    """
     if executions == []:
         raise PreventUpdate
 
-    options=[{'label':sel_exec, 'value': sel_exec} for sel_exec in executions]
+    options = [{'label':sel_exec, 'value': sel_exec} for sel_exec in executions]
     style = {}
 
     return options, {'style':style}
@@ -256,7 +240,9 @@ def enable_parameters(executions):
     Output('selected-exec', 'value'),
     Input('selected-exec', 'value'))
 def load_parameter_config(selected_exec):
-
+    """
+    Get the selected execution and loads its parameters menu
+    """
     if selected_exec == []:
         raise PreventUpdate
     
@@ -264,14 +250,16 @@ def load_parameter_config(selected_exec):
     children = gen_input(selected_exec, selected_exec, json.load(f))
     return children, []
 
+@app.callback(Output('params-dict', 'data'),
+    Input('algo', 'algo'))
+def dummy(algo=None):
+    return {}
+
 @app.callback(Output('experiment-results', 'children'),
     [Input('executions', 'value'),
     Input('dataset', 'data'),
     Input('experiment-id', 'data'),
-    Input('params-dict', 'data')]
-    #Input('available-models', 'data'),
-    #*executions)
-    )
+    Input('params-dict', 'data')])
 def run_experiment(executions, dataset, exp_id, params_dict):
 
     #TODO Change this condition to a button
@@ -280,7 +268,7 @@ def run_experiment(executions, dataset, exp_id, params_dict):
     
     # Create and configure task
     dataset_info = dataset['task_info']
-    main_task : taskMain.Task = get_task(dataset_info['task_type'])
+    main_task : Task = get_task(dataset_info['task_type'])
     main_task.config(dataset_info['task_parameters'])
 
     # Obtain the selected models to execute

@@ -10,12 +10,10 @@ class Experiment(db.Base):
 
     id = Column(Integer, primary_key=True)
     task_type = Column(String, nullable=False)
-    task_parameters = Column(JSON)
     execution = relationship("Execution")
 
-    def __init__(self, task_type, task_parameters):
+    def __init__(self, task_type):
         self.task_type = task_type
-        self.task_parameters = task_parameters
     
     def __repr__(self) -> str:
         return f'Experiment({self.id}, {self.type}'

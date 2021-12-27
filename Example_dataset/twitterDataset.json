@@ -1,10 +1,6 @@
 {
     "task_info":{
-        "task_type":"text-classification",
-        "task_parameters": {
-            "LABEL" : "SINGLE",
-            "INSTANCE" : "SINGLE"
-        }
+        "task_type":"TextClassificationSimpleTask"
     },
     "train": {
         "x": [
