@@ -2,7 +2,7 @@
 # visit http://127.0.0.1:8050/ in your web browser.
 
 import json, dash, base64, db
-from dash import dcc, html
+from dash import dcc, html,MATCH, ALL
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
@@ -52,34 +52,34 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
 
     if param_type == "string":
         input_component = dcc.Dropdown(
-            id=f"{model_name}-{param_name}",
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
             options=[{'label':opt,'value':opt} for opt in param_json_schema.get("enum")],
             value=param_default
         )
 
     elif param_type == "boolean":
         input_component = dcc.Dropdown(
-            id=f"{model_name}-{param_name}",
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
             options=[{'label':opt, 'value':opt} for opt in ["True", "False"]],
             value=str(param_default)
         )
     elif param_type == "number":
         if "minimum" in param_json_schema.keys():
             input_component = dcc.Input(
-                id=f"{model_name}-{param_name}",
+                id=dict(type='form-input', name=f"{model_name}-{param_name}"),
                 type="number",
                 min=param_json_schema.get("minimum"),
                 value=param_default
             )
         else:
             input_component = dcc.Input(
-                id=f"{model_name}-{param_name}",
+                id=dict(type='form-input', name=f"{model_name}-{param_name}"),
                 type="number",
                 value=param_default
             )
     elif param_type == "integer":
         input_component = dcc.Input(
-            id=f"{model_name}-{param_name}",
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
             type="number",
             value=param_default,
             step=1,
@@ -87,14 +87,14 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
 
     elif param_type == "object":
         input_component = html.Div(
-            id=f"params-{model_name}",
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
             children=[gen_input(model_name, param, param_json_schema.get("properties").get(param).get("oneOf")[0]) \
                 for param in param_json_schema.get("properties").keys()]
         )
     return html.Div(
         id=f"{model_name}-{param_name}-div",
         children=[
-            html.Label(f"{param_name}: "),
+            html.Label(f"{param_name}: ", id=dict(type='form-label', name=f"{model_name}-{param_name}")),
             input_component
         ]
     )
@@ -106,6 +106,7 @@ app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_ca
 
 app.layout = html.Div([
     dbc.Row([
+    html.Div(id='test-parameters', children = [html.H2("Muestra los parámetros")]),
     dbc.Col([
         dbc.Row([
         html.H2("Load Dataset"),
@@ -160,7 +161,8 @@ app.layout = html.Div([
                         )
                     ],
                     style={'display':'none'}),
-                html.Div(id='parameter-config')
+                html.Div(id='parameter-config'),
+                dbc.Button("Submit", color="dark", className="me-1", id='button-submit')
             ]),
         #gen_input("SVM", "SVM", json.load(f)),
         html.Br(),
@@ -179,6 +181,22 @@ app.layout = html.Div([
     # Parameters dict
     dcc.Store(id='params-dict')
 ])
+
+@app.callback(
+    Output('test-parameters', 'children'),
+    [Input('button-submit', component_property='n_clicks')],
+    [
+        State(dict(type='form-input', name=ALL), 'value'),
+        State(dict(type='form-label', name=ALL), 'children')
+    ]
+)
+def get_parameters(n_clicks, values, labels):
+    if n_clicks is None:
+        raise PreventUpdate
+    params_dict = {}
+    for label, value in zip(labels[1:], values[1:]):
+        params_dict[label[:-2]] = value
+    return str(params_dict)
  
 @app.callback([Output('dataset', 'data'),
     Output('experiment-id', 'data'),
