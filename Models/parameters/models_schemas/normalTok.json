@@ -1,0 +1,32 @@
+{   
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de normalTok deben ser alguno(s) de ['useStopWords', 'alpha', 'beta'].",
+    "description": "NormalTok es un tokenizador estandar de machine learning.",
+    "properties": {
+        "useStopWords":
+        {
+            "error_msg": "El parámetro 'useStopWords' debe ser de tipo boolean, debe ser 'false' para eliminar stopWords.",
+            "description": "El parámetro 'useStopWords' indica si se utilizan o no stopWords. Debe ser de tipo boolean.",
+            "type": "boolean",
+            "default": false
+        },
+        "alpha":
+        {
+            "error_msg": "El parámetro 'alpha' debe ser de tipo number entre 0 y 1.",
+            "description": "El parámetro 'alpha' no indica nada.",
+            "type": "number",
+            "default": 1,
+            "minimum": 0,
+            "maximum": 1
+        },
+        "beta":
+        {
+            "error_msg": "El parámetro 'beta' debe ser 'hello', 'how', 'are' o 'you'",
+            "description": "El parámetro 'beta' no indica nada.",
+            "type": "string",
+            "default": "hello",
+            "enum": ["hello", "how", "are", "you"]
+        }
+    },
+    "type": "object"
+}
