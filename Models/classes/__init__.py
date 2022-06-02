@@ -3,6 +3,8 @@ from pkgutil import iter_modules
 from pathlib import Path
 from importlib import import_module
 
+base_path = __name__
+
 available_models = []
 # iterate through the modules in the current package
 package_dir = Path(__file__).resolve().parent
