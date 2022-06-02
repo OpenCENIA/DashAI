@@ -9,10 +9,12 @@ from Models.preprocess.preprocess import PreProcess
 nlp = spacy.load("en_core_web_sm")
 logger = logging.getLogger()
 
-def identity_split(text):
-    return text.split(' ')
 
-#version == 1.0.0
+def identity_split(text):
+    return text.split(" ")
+
+
+# version == 1.0.0
 class TFIDFPreprocess(PreProcess):
     """
     Vectorizador de tipo TFIDF.
@@ -20,7 +22,8 @@ class TFIDFPreprocess(PreProcess):
     Args:
         PreProcess: Clase padre de todos los preprocesamientos implementados.
     """
-    with open('Models/parameters/preprocess_schemas/tfidf.json') as f:
+
+    with open("Models/parameters/preprocess_schemas/tfidf.json") as f:
         schema = json.load(f)
 
     def __init__(self, dic):
@@ -30,10 +33,10 @@ class TFIDFPreprocess(PreProcess):
         Args:
             dic (dict): Diccionario con la información del preprocesamiento.
                         Las dos entradas del diccionario son:
-                        
+
                         tokenizer (list): Lista de tokenizadores
                                             instanciados.
-                        
+
                         params (dict): Contiene los hiperparámetros del
                                         preprocesamiento. Una lista detallada
                                         se encuentra a continuación.
@@ -50,8 +53,8 @@ class TFIDFPreprocess(PreProcess):
             lowercase (bool): Convierte todos los caracteres a minúsculas.
                                 Default: True.
             ngram_range (tuple): Cota inferior y superior para los rangos de
-                                    n-gramas utilizados. Ejemplo: (1, 3) considera
-                                    unigramas, bigramas y trigramas.
+                                    n-gramas utilizados. Ejemplo: (1, 3)
+                                    considera unigramas, bigramas y trigramas.
                                     Default: (1, 1).
             analyzer (str): Puede ser alguno de {'word', 'char', 'char_wb'}.
                             Indica si los n-gramas debiesen ser de palabras o
@@ -74,15 +77,12 @@ class TFIDFPreprocess(PreProcess):
             sublinear_tf (bool): Aplica escalamiento sublineal al
                                     escalamiento tf. Default: False.
         """
-        prep_kwargs = dic.get('params', {})
-        tokenizer_kwargs = dic.get('tokenizers', None)
+        prep_kwargs = dic.get("params", {})
+        tokenizer_kwargs = dic.get("tokenizers", None)
         super().__init__(tokenizer_kwargs)
-        prep_kwargs['analyzer'] = prep_kwargs.get(
-            'analyzer', 'word')
-        prep_kwargs['tokenizer'] = prep_kwargs.get(
-            'tokenizer', identity_split)
-        prep_kwargs['lowercase'] = prep_kwargs.get(
-            'lowercase', True)
+        prep_kwargs["analyzer"] = prep_kwargs.get("analyzer", "word")
+        prep_kwargs["tokenizer"] = prep_kwargs.get("tokenizer", identity_split)
+        prep_kwargs["lowercase"] = prep_kwargs.get("lowercase", True)
         self.vectorizer = TfidfVectorizer(**prep_kwargs)
         # Revisar si esta solución es la mejor.
         self.fit_bool = True
@@ -103,6 +103,7 @@ class TFIDFPreprocess(PreProcess):
             self.vectorizer.fit(text)
             self.fit_bool = False
         return self.vectorizer.transform(text)
+
 
 if __name__ == "__main__":
     pass

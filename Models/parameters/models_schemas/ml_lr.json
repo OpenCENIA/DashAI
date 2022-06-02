@@ -285,7 +285,7 @@
                             "penalty": {
                                 "type": "string",
                                 "enum": ["l2", "none"],
-                                "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."                
+                                "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."
                             }
                         }
                     },
@@ -296,7 +296,7 @@
                                 "items": {
                                     "type": "string",
                                     "enum": ["l2", "none"],
-                                    "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."                    
+                                    "error_msg": "Los solvers 'newton-cg', 'lbfgs', 'sag' de ML_LR sirve solo con penalty 'l2' o 'none'."
                                 }
                             }
                         }

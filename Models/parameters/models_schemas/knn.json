@@ -1,4 +1,4 @@
-{   
+{
     "additionalProperties": false,
     "error_msg": "Los parámetros de KNN deben ser alguno(s) de ['k', 's', 'ignore_first_neighbours'].",
     "description": "KNN es un método de clasificación supervizado, que determina la probabildiad de que un elemento pertenezca a una determinada clase, considerando a sus k vecinos más cercanos.",
@@ -22,7 +22,7 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "s": {
@@ -46,14 +46,14 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "ignore_first_neighbours": {
             "oneOf": [
                 {
                     "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                    "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.", 
+                    "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.",
                     "type": "integer",
                     "default": 0,
                     "minimum": 0
@@ -61,16 +61,16 @@
                 {
                     "items": {
                         "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                        "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.", 
+                        "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.",
                         "type": "integer",
                         "default": 0,
                         "minimum": 0
                     },
                     "type": "array"
                 }
-                
+
             ]
         }
     },
-    "type": "object"  
+    "type": "object"
 }

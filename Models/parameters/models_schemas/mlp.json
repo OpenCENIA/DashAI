@@ -1,7 +1,7 @@
 {
     "additionalProperties": false,
     "error_msg": "Multi Layer Perceptron. Especializada para múltiples etiquetas. Los parámetros de MLP deben ser alguno(s) de ['depth', 'activation', 'optimizer', 'verb', 'epochs'].",
-    "description":"Multi Layer Perceptron. Especializada para múltiples etiquetas. Los parámetros de MLP deben ser alguno(s) de ['depth', 'activation', 'optimizer', 'verb', 'epochs']." , 
+    "description":"Multi Layer Perceptron. Especializada para múltiples etiquetas. Los parámetros de MLP deben ser alguno(s) de ['depth', 'activation', 'optimizer', 'verb', 'epochs']." ,
     "properties": {
         "activation": {
                     "oneOf": [
