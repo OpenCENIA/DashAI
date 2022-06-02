@@ -1,10 +1,9 @@
 import logging
-from abc import ABCMeta, abstractmethod
-from Models.classes.model import Model
+from abc import ABCMeta
 logger = logging.getLogger()
 
 #version == 1.0.0
-class Tokenizer(Model,metaclass=ABCMeta):
+class Tokenizer(metaclass=ABCMeta):
 
     def tok(self, s):
         return s
