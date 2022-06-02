@@ -3,29 +3,38 @@
     "error_msg": "Los parámetros de TweetTok deben ser alguno(s) de ['useTwitterStopWords', 'first', 'second'].",
     "description": "TweetTok es un tokenizador moderno adaptado para procesar particularmente bien tweets.",
     "properties": {
-        "useTwitterStopWords":
-        {
-            "error_msg": "El parámetro 'useTwitterStopWords' debe ser de tipo boolean, debe ser 'false' para eliminar stopWords.",
-            "description": "El parámetro 'useTwitterStopWords' indica si se utilizan o no stopWords. Debe ser de tipo boolean.",
-            "type": "boolean",
-            "default": false
+        "useTwitterStopWords": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'useTwitterStopWords' debe ser de tipo boolean, debe ser 'false' para eliminar stopWords.",
+                    "description": "El parámetro 'useTwitterStopWords' indica si se utilizan o no stopWords. Debe ser de tipo boolean.",
+                    "type": "boolean",
+                    "default": false
+                }
+            ]
         },
-        "first":
-        {
-            "error_msg": "El parámetro 'first' debe ser de tipo number entre 0 y 1.",
-            "description": "El parámetro 'first' no indica nada.",
-            "type": "number",
-            "default": 1,
-            "minimum": 0,
-            "maximum": 1
+        "first": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'first' debe ser de tipo number entre 0 y 1.",
+                    "description": "El parámetro 'first' no indica nada.",
+                    "type": "number",
+                    "default": 1,
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            ]
         },
-        "second":
-        {
-            "error_msg": "El parámetro 'second' debe ser 'hello', 'how', 'are' o 'you'",
-            "description": "El parámetro 'second' no indica nada.",
-            "type": "string",
-            "default": "hello",
-            "enum": ["hello", "how", "are", "you"]
+        "second": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'second' debe ser 'hello', 'how', 'are' o 'you'",
+                    "description": "El parámetro 'second' no indica nada.",
+                    "type": "string",
+                    "default": "hello",
+                    "enum": ["hello", "how", "are", "you"]
+                }
+            ]
         }
     },
     "type": "object"

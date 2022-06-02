@@ -71,12 +71,15 @@
                 
             ]
         },
-        "dummy-tokenizer":
-        {
-            "error_msg": "El parámetro 'dummy-tokenizer' debe ser un objeto de tipo tokenizer.",
-            "description": "El parámetro 'dummy-tokenizer' permite seleccionar el tokenizador que usara el modelo.", 
-            "type": "object",
-            "class": "tokenizer"
+        "dummy-tokenizer": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'dummy-tokenizer' debe ser un objeto de tipo tokenizer.",
+                    "description": "El parámetro 'dummy-tokenizer' permite seleccionar el tokenizador que usara el modelo.", 
+                    "type": "class",
+                    "parent": "Tokenizer"
+                }
+            ]
         }
     },
     "type": "object"  
