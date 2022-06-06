@@ -11,9 +11,7 @@ class F1(Metric):
         f1_labels = f1_score(y_true, y_pred, average=None, zero_division=1)
         macro = f1_score(y_true, y_pred, average="macro", zero_division=1)
         micro = f1_score(y_true, y_pred, average="micro", zero_division=1)
-        weighted = f1_score(
-            y_true, y_pred, average="weighted", zero_division=1
-        )
+        weighted = f1_score(y_true, y_pred, average="weighted", zero_division=1)
         # samples = f1_score(
         # y_true, y_pred, average='samples', zero_division=1)
 

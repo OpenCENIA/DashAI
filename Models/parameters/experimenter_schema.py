@@ -224,11 +224,7 @@ def get_full_schema():
                 "additionalProperties": False,
                 "allOf": [
                     {
-                        "if": {
-                            "properties": {
-                                "optimizer_label": {"const": "global"}
-                            }
-                        },
+                        "if": {"properties": {"optimizer_label": {"const": "global"}}},
                         "then": {
                             "properties": {
                                 "optimizer_metric": {
@@ -241,9 +237,7 @@ def get_full_schema():
                     },
                     {
                         "if": {
-                            "properties": {
-                                "optimizer_metric": {"const": "accuracy"}
-                            }
+                            "properties": {"optimizer_metric": {"const": "accuracy"}}
                         },
                         "then": {
                             "properties": {

@@ -26,9 +26,7 @@ class RemovePunctuations(Tokenizer):
             array-like: Arreglo de texto sin puntuaciones.
         """
         lista = [
-            sent.translate(
-                str.maketrans("", "", """!()-[]{};:'",<>./?@#$%^&*_~""")
-            )
+            sent.translate(str.maketrans("", "", """!()-[]{};:'",<>./?@#$%^&*_~"""))
             for sent in text
         ]
         lista = [re.sub("“", "", sent) for sent in lista]

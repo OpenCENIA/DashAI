@@ -12,12 +12,8 @@ from dash.exceptions import PreventUpdate
 import db
 from models import Execution, Experiment
 from TaskLib.task.taskMain import Task
-from TaskLib.task.textClassificationMLabelTask import (
-    TextClassificationMLabelTask,
-)
-from TaskLib.task.textClassificationSimpleTask import (
-    TextClassificationSimpleTask,
-)
+from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTask
+from TaskLib.task.textClassificationSimpleTask import TextClassificationSimpleTask
 
 
 def parse_contents(contents, filename):
@@ -61,8 +57,7 @@ def gen_input(model_name: str, param_name: str, param_json_schema: dict):
         input_component = dcc.Dropdown(
             id=dict(type="form-input", name=f"{model_name}-{param_name}"),
             options=[
-                {"label": opt, "value": opt}
-                for opt in param_json_schema.get("enum")
+                {"label": opt, "value": opt} for opt in param_json_schema.get("enum")
             ],
             value=param_default,
         )
@@ -70,9 +65,7 @@ def gen_input(model_name: str, param_name: str, param_json_schema: dict):
     elif param_type == "boolean":
         input_component = dcc.Dropdown(
             id=dict(type="form-input", name=f"{model_name}-{param_name}"),
-            options=[
-                {"label": opt, "value": opt} for opt in ["True", "False"]
-            ],
+            options=[{"label": opt, "value": opt} for opt in ["True", "False"]],
             value=str(param_default),
         )
     elif param_type == "number":
@@ -104,9 +97,7 @@ def gen_input(model_name: str, param_name: str, param_json_schema: dict):
                 gen_input(
                     model_name,
                     param,
-                    param_json_schema.get("properties")
-                    .get(param)
-                    .get("oneOf")[0],
+                    param_json_schema.get("properties").get(param).get("oneOf")[0],
                 )
                 for param in param_json_schema.get("properties").keys()
             ],
@@ -169,9 +160,7 @@ app.layout = html.Div(
                                 html.Div(
                                     id="execution-config",
                                     children=[
-                                        html.Label(
-                                            "Select the models to train: "
-                                        ),
+                                        html.Label("Select the models to train: "),
                                         html.Div(
                                             children=[
                                                 dcc.Checklist(
@@ -293,9 +282,7 @@ def load_dataset(contents, filename):
 
     # Get and show available models
     available_models: list = main_task.get_compatible_models()
-    options: list = [
-        {"label": model, "value": model} for model in available_models
-    ]
+    options: list = [{"label": model, "value": model} for model in available_models]
 
     # Make visible the execution-config div
     style = {}
@@ -316,9 +303,7 @@ def enable_parameters(executions):
     if executions == []:
         raise PreventUpdate
 
-    options = [
-        {"label": sel_exec, "value": sel_exec} for sel_exec in executions
-    ]
+    options = [{"label": sel_exec, "value": sel_exec} for sel_exec in executions]
     style = {}
 
     return options, {"style": style}
