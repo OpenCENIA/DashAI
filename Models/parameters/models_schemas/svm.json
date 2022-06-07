@@ -1,7 +1,7 @@
 {
     "additionalProperties": false,
     "error_msg": "Los parámetros de SVM deben ser alguno(s) de ['C', 'coef0', 'degree', 'gamma', 'kernel'  , 'max_iter', 'probability', 'shrinking', 'tol', 'verbose'].",
-    "description": "SVM es un algoritmo de aprendizaje supervisado, que clasifica información generando un hiperplano que separa los puntos de las clases de manera óptima.", 
+    "description": "SVM es un algoritmo de aprendizaje supervisado, que clasifica información generando un hiperplano que separa los puntos de las clases de manera óptima.",
     "properties": {
         "C": {
             "oneOf":[
@@ -26,7 +26,7 @@
         },
         "coef0": {
             "oneOf":[
-                {    
+                {
                     "error_msg": "El parámetro 'coef0' debe ser de tipo number.",
                     "description": "El parámetro 'coef0' es un valor independiente del kernel. Solo es significante para kernel poly y sigmoid. Debe ser de tipo number.",
                     "type": "number",
@@ -45,9 +45,9 @@
         },
         "degree": {
             "oneOf":[
-                {    
+                {
                     "error_msg": "El parámetro 'degree' debe tipo number",
-                    "description": "El parámetro 'degree' es el grado del polinomio para el kernel = 'poly'. Debe tipo number.", 
+                    "description": "El parámetro 'degree' es el grado del polinomio para el kernel = 'poly'. Debe tipo number.",
                     "type": "number",
                     "default": 3,
                     "minimum": 0

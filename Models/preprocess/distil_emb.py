@@ -7,7 +7,8 @@ from Models.preprocess.preprocess import PreProcess
 
 logger = logging.getLogger()
 
-#version == 1.0.0
+
+# version == 1.0.0
 class DistilBertEmbedding(PreProcess):
     """
     Vectorizador de tipo Embedding.
@@ -15,7 +16,8 @@ class DistilBertEmbedding(PreProcess):
     Args:
         PreProcess: Clase padre de todos los preprocesamientos implementados.
     """
-    with open('Models/parameters/preprocess_schemas/distil.json') as f:
+
+    with open("Models/parameters/preprocess_schemas/distil.json") as f:
         schema = json.load(f)
 
     def __init__(self, dic):
@@ -33,11 +35,13 @@ class DistilBertEmbedding(PreProcess):
                                         preprocesamiento. Una lista detallada
                                         se encuentra a continuación.
         """
-        prep_kwargs = dic.get('params', {})
-        tokenizer_kwargs = dic.get('tokenizers', None)
+        # prep_kwargs = dic.get("params", {})
+        tokenizer_kwargs = dic.get("tokenizers", None)
 
         super().__init__(tokenizer_kwargs)
-        self.model = SentenceTransformer('paraphrase-distilroberta-base-v1', device='cpu')
+        self.model = SentenceTransformer(
+            "paraphrase-distilroberta-base-v1", device="cpu"
+        )
 
     def apply(self, text):
         """
@@ -52,6 +56,7 @@ class DistilBertEmbedding(PreProcess):
         """
         text = self.tokenizer_cont.apply(text)
         return self.model.encode(text)
+
 
 if __name__ == "__main__":
     pass

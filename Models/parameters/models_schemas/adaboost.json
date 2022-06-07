@@ -1,5 +1,5 @@
 {
-   
+
     "additionalProperties": false,
     "error_msg": "Los parámetros de AB deben ser alguno(s) de ['n_estimators', 'learning_rate', 'algorithm'].",
     "description": " Adaboost es un machine learning meta-algorithm, este algoritmo da prioridad a los elementos mal clasificados. Los parámetros de AB deben ser alguno(s) de ['n_estimators', 'learning_rate', 'algorithm'].",
@@ -92,12 +92,10 @@
                         "default": 0
                     },
                     "type":"array"
-    
+
                 }
             ]
         }
     },
     "type": "object"
 }
-    
-    

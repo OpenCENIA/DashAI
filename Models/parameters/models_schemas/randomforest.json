@@ -7,7 +7,7 @@
             "oneOf": [
                 {
                     "error_msg": "El parámetro 'n_estimators' debe ser de tipo entero mayor o igual a 1.",
-                    "description": "El parámetro 'n_estimators' corresponde al número de árboles de decisión. Debe ser de tipo entero mayor o igual a 1.", 
+                    "description": "El parámetro 'n_estimators' corresponde al número de árboles de decisión. Debe ser de tipo entero mayor o igual a 1.",
                     "type": "integer",
                     "default": 200,
                     "minimum": 1
@@ -22,7 +22,7 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "max_depth": {
@@ -44,14 +44,14 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "min_samples_split": {
             "oneOf": [
                 {
                     "error_msg": "El parámetro 'min_samples_split' debe ser de tipo number mayor o igual a 2.",
-                    "description": "El parámetro 'min_samples_split' es el mínimo número de samples requeridos para particionar un nodo interno. Debe ser de tipo number mayor o igual a 2.", 
+                    "description": "El parámetro 'min_samples_split' es el mínimo número de samples requeridos para particionar un nodo interno. Debe ser de tipo number mayor o igual a 2.",
                     "type": "number",
                     "default": 2,
                     "minimum": 2
@@ -66,7 +66,7 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "random_state": {
@@ -88,7 +88,7 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "min_samples_leaf": {
@@ -103,14 +103,14 @@
                 {
                     "items": {
                         "error_msg": "El parámetro 'min_samples_leaf' debe ser de tipo number mayor o igual a 1.",
-                        "description": "El parámetro 'min_samples_leaf' es el mínimo número de samples requeridas para estar en un nodo hoja. Debe ser de tipo number mayor o igual a 1.", 
+                        "description": "El parámetro 'min_samples_leaf' es el mínimo número de samples requeridas para estar en un nodo hoja. Debe ser de tipo number mayor o igual a 1.",
                         "type": "number",
                         "default": 2,
                         "minimum": 1
                     },
                     "type": "array"
                 }
-                
+
             ]
         },
         "max_leaf_nodes": {
@@ -132,9 +132,9 @@
                     },
                     "type": "array"
                 }
-                
+
             ]
         }
     },
-    "type": "object" 
+    "type": "object"
 }

@@ -57,7 +57,7 @@
                       {
                         "items": {
                                 "error_msg": "El parámetro 'strip_accents' debe ser uno entre 'ascii', 'unicode'",
-                                "description": "Remueve acentos durante la normalización. Los posibles valores no nulos son 'ascii' y 'unicode'. Default: None.",          
+                                "description": "Remueve acentos durante la normalización. Los posibles valores no nulos son 'ascii' y 'unicode'. Default: None.",
                                 "type": "string",
                                 "enum": ["ascii", "unicode"],
                                 "default": null
