@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 
-from Models.classes import *
+from Models.classes.getters import introspect_classes, filter_by_parent
 
 class Task(ABC):
     """
@@ -48,11 +48,16 @@ class Task(ABC):
 
         Return a list of string with the names of the models.
         """
+        classes_dict = introspect_classes()
+
         compatible_models : list = []
-        for modelName in get_available_models():
-            modelClass = globals().get(modelName)
-            if self.NAME in modelClass.TASK:
-                compatible_models.append(modelName)
+        for class_name in classes_dict.keys():
+            model_class = classes_dict.get(class_name)
+            try:
+                if self.NAME in model_class.TASK:
+                    compatible_models.append(class_name)
+            except:
+                continue
         
         return compatible_models
     

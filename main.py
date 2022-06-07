@@ -13,6 +13,8 @@ from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTa
 
 from models import Experiment, Execution
 
+from Models.classes.getters import introspect_classes, filter_by_parent
+
 def parse_contents(contents, filename):
     """
     Loads the input data, if it's format is JSON, otherwise throw an exception
@@ -91,6 +93,15 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
             children=[gen_input(model_name, param, param_json_schema.get("properties").get(param).get("oneOf")[0]) \
                 for param in param_json_schema.get("properties").keys()]
         )
+    
+    elif param_type == "class":
+        parent_class_name = param_json_schema.get("parent")
+        input_component = dcc.Dropdown(
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
+            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name,introspect_classes()).keys()],
+            value=str(param_default)
+        )
+
     return html.Div(
         id=f"{model_name}-{param_name}-div",
         children=[
