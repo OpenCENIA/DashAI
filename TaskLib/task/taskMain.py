@@ -1,6 +1,13 @@
 from abc import ABC,abstractmethod
+from lib2to3.pgen2.token import NAME
 
+from sqlalchemy import inspect
 from Models.classes import *
+from inspect import isclass
+from pkgutil import iter_modules
+from pathlib import Path
+from importlib import import_module
+from Models import classes
 
 class Task(ABC):
     """
@@ -10,6 +17,7 @@ class Task(ABC):
 
     # task name, present in the compatible models
     NAME : str = ""
+    available_models = []
 
     # @abstractmethod
     # def get_parameters_structure(self) -> dict:
@@ -42,19 +50,35 @@ class Task(ABC):
     #     """
     #     pass
 
-    def get_compatible_models(self) -> list:
+    def __init__(self, taskName):
+        self.NAME = taskName
+        self.set_compatible_models(taskName)
+
+    def set_compatible_models(self, taskName) -> list:
         """
-        This method provides all task compatible models that are currently available.
+        This method provides all the currently available models compatible with the task.
 
         Return a list of string with the names of the models.
         """
-        compatible_models : list = []
-        for modelName in get_available_models():
-            modelClass = globals().get(modelName)
-            if self.NAME in modelClass.TASK:
-                compatible_models.append(modelName)
-        
-        return compatible_models
+        for (_, module_name, _) in iter_modules(classes.__path__):
+
+            #import the module and iterate through its attributes
+            module = import_module(f"{classes.__name__}.{module_name}")
+            for attribute_name in dir(module):
+                attribute = getattr(module, attribute_name)
+
+                if isclass(attribute):            
+                    # Add the class to this package's variables
+                    try:
+                        model_name = attribute.MODEL
+                        if taskName in attribute.TASK:
+                            if not model_name in self.available_models:
+                                self.available_models += [model_name]
+                    except:
+                        continue
+
+    def get_compatible_models(self) -> list:
+        return self.available_models
     
     @abstractmethod
     def set_executions(self, models : list, params : list) -> None:

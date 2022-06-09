@@ -205,6 +205,7 @@ def get_parameters(n_clicks, values, labels):
     Output('execution-config','style')],
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'))
+
 def load_dataset(contents, filename):
     """
     Receive the upload data input and stores in dataset. 
@@ -278,6 +279,7 @@ def dummy(algo=None):
     Input('dataset', 'data'),
     Input('experiment-id', 'data'),
     Input('params-dict', 'data')])
+    
 def run_experiment(executions, dataset, exp_id, params_dict):
 
     #TODO Change this condition to a button
