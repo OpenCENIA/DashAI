@@ -2,16 +2,20 @@
 # visit http://127.0.0.1:8050/ in your web browser.
 
 import json, dash, base64, db
-from dash import dcc, html,MATCH, ALL
+from dash import dcc, html, callback_context, MATCH, ALL
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+
+from Models.classes.getters import introspect_classes, filter_by_parent
 
 from TaskLib.task.taskMain import Task
 from TaskLib.task.textClassificationSimpleTask import TextClassificationSimpleTask
 from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTask
 
 from models import Experiment, Execution
+
+from Models.classes.getters import introspect_classes, filter_by_parent
 
 def parse_contents(contents, filename):
     """
@@ -47,7 +51,6 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
     """
     param_type = param_json_schema.get("type")
     param_default = param_json_schema.get("default",None)
-
     input_component = None
 
     if param_type == "string":
@@ -91,6 +94,15 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
             children=[gen_input(model_name, param, param_json_schema.get("properties").get(param).get("oneOf")[0]) \
                 for param in param_json_schema.get("properties").keys()]
         )
+    
+    elif param_type == "class":
+        parent_class_name = param_json_schema.get("parent")
+        input_component = dcc.Dropdown(
+            id=dict(type='form-input', name=f"{model_name}-{param_name}"),
+            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name,introspect_classes()).keys()],
+            value=str(param_default)
+        )
+
     return html.Div(
         id=f"{model_name}-{param_name}-div",
         children=[
@@ -106,7 +118,7 @@ app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_ca
 
 app.layout = html.Div([
     dbc.Row([
-    html.Div(id='test-parameters', children = [html.H2("Muestra los parámetros")]),
+    html.Div(id='test-parameters', children = [html.H2()]),
     dbc.Col([
         dbc.Row([
         html.H2("Load Dataset"),
@@ -162,7 +174,10 @@ app.layout = html.Div([
                     ],
                     style={'display':'none'}),
                 html.Div(id='parameter-config'),
-                dbc.Button("Submit", color="dark", className="me-1", id='button-submit')
+                html.Br(),
+                dbc.Button("Submit", color="dark", className="me-1", id='button-submit', style={'display': 'none'}),
+                html.Br(),
+                dbc.Button("Run Experiment", color="dark", className="me-1", n_clicks=0, id='button-run-experiment', style={'display': 'none'})
             ]),
         #gen_input("SVM", "SVM", json.load(f)),
         html.Br(),
@@ -183,20 +198,45 @@ app.layout = html.Div([
 ])
 
 @app.callback(
+    Output('params-dict', 'data'),
     Output('test-parameters', 'children'),
-    [Input('button-submit', component_property='n_clicks')],
-    [
-        State(dict(type='form-input', name=ALL), 'value'),
-        State(dict(type='form-label', name=ALL), 'children')
-    ]
-)
-def get_parameters(n_clicks, values, labels):
-    if n_clicks is None:
-        raise PreventUpdate
-    params_dict = {}
-    for label, value in zip(labels[1:], values[1:]):
-        params_dict[label[:-2]] = value
-    return str(params_dict)
+    [Input('button-submit', component_property='n_clicks'),
+    Input('executions', 'value')],
+    [State(dict(type='form-input', name=ALL), 'value'),
+    State(dict(type='form-label', name=ALL), 'children'),
+    State('params-dict', 'data')],
+    prevent_initial_call=True)
+def store_parameters(n_clicks, executions, values, labels, prev_params_dict):
+    """
+    Get and store default parameters when a model is selected.
+    Retrieve and store parameters configured by the user.
+    """
+
+    #Store in "params-dict" the default values for the parameters of each selected model.
+    if callback_context.triggered[0]['prop_id'] == 'executions.value':
+        default_params_dict = {}
+        for sel_exec in executions:
+            sel_exec_default_params = {}
+            with open(f'Models/parameters/models_schemas/{sel_exec}.json') as f:
+                param_json_schema = json.load(f)
+                for param in param_json_schema.get("properties").keys():
+                    sel_exec_default_params[param] = param_json_schema.get("properties").get(param).get("oneOf")[0].get("default")
+            default_params_dict[sel_exec] = sel_exec_default_params
+        return default_params_dict, str(default_params_dict)
+
+    #Retrieve and store parameters defined by the user when "Submit" button is pressed.
+    elif callback_context.triggered[0]['prop_id'] == 'button-submit.n_clicks':
+        params_dict = {}
+        for label, value in zip(labels[1:], values[1:]):
+            params_dict[label[:-2]] = value
+        if prev_params_dict is None:
+            return {labels[0][:-2] : params_dict}, str({labels[0][:-2] : params_dict})
+        else:
+            prev_params_dict[labels[0][:-2]] = params_dict
+            return prev_params_dict, str(prev_params_dict)
+    
+    
+    
  
 @app.callback([Output('dataset', 'data'),
     Output('experiment-id', 'data'),
@@ -241,6 +281,7 @@ def load_dataset(contents, filename):
 
 @app.callback(Output('selected-exec', 'options'),
     Output('exec-selection', 'style'),
+    Output('button-run-experiment', 'style'),
     Input('executions', 'value'))
 def enable_parameters(executions):
     """
@@ -250,13 +291,14 @@ def enable_parameters(executions):
     if executions == []:
         raise PreventUpdate
 
-    options = [{'label':sel_exec, 'value': sel_exec} for sel_exec in executions]
+    options = [{'label':sel_exec, 'value': sel_exec} for sel_exec in executions]        
     style = {}
 
-    return options, {'style':style}
+    return options, {'style':style}, {'style':style}
 
 @app.callback(Output('parameter-config', 'children'),
     Output('selected-exec', 'value'),
+    Output('button-submit', 'style'),
     Input('selected-exec', 'value'))
 def load_parameter_config(selected_exec):
     """
@@ -267,24 +309,25 @@ def load_parameter_config(selected_exec):
     
     f = open(f'Models/parameters/models_schemas/{selected_exec}.json')
     children = gen_input(selected_exec, selected_exec, json.load(f))
-    return children, []
+    return children, [], {'style': {}}
 
-@app.callback(Output('params-dict', 'data'),
-    Input('algo', 'algo'))
-def dummy(algo=None):
-    return {}
+#@app.callback(Output('params-dict', 'data'),
+#    Input('algo', 'algo'))
+#def dummy(algo=None):
+#    return {}
 
 @app.callback(Output('experiment-results', 'children'),
-    [Input('executions', 'value'),
+    [Input('button-run-experiment', 'n_clicks'),
+    Input('executions', 'value'),
     Input('dataset', 'data'),
     Input('experiment-id', 'data'),
-    Input('params-dict', 'data')])
-    
-def run_experiment(executions, dataset, exp_id, params_dict):
-
+    Input('params-dict', 'data')],
+    prevent_initial_call = True)
+def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
     #TODO Change this condition to a button
     #if executions == [] or dataset == None:
-    raise PreventUpdate
+    if n_clicks == 0:
+        raise PreventUpdate
     
     # Create and configure task
     dataset_info = dataset['task_info']

@@ -1,13 +1,16 @@
 from abc import ABC,abstractmethod
 from lib2to3.pgen2.token import NAME
 
-from sqlalchemy import inspect
-from Models.classes import *
-from inspect import isclass
-from pkgutil import iter_modules
-from pathlib import Path
-from importlib import import_module
-from Models import classes
+# from sqlalchemy import inspect
+# from Models.classes import *
+# from inspect import isclass
+# from pkgutil import iter_modules
+# from pathlib import Path
+# from importlib import import_module
+# from Models import classes
+
+from Models.classes.getters import introspect_classes, filter_by_parent
+
 
 class Task(ABC):
     """
@@ -17,7 +20,7 @@ class Task(ABC):
 
     # task name, present in the compatible models
     NAME : str = ""
-    available_models = []
+    compatible_models :list = []
 
     # @abstractmethod
     # def get_parameters_structure(self) -> dict:
@@ -55,30 +58,22 @@ class Task(ABC):
         self.set_compatible_models(taskName)
 
     def set_compatible_models(self, taskName) -> list:
-        """
-        This method provides all the currently available models compatible with the task.
 
-        Return a list of string with the names of the models.
-        """
-        for (_, module_name, _) in iter_modules(classes.__path__):
+        classes_dict = introspect_classes()
 
-            #import the module and iterate through its attributes
-            module = import_module(f"{classes.__name__}.{module_name}")
-            for attribute_name in dir(module):
-                attribute = getattr(module, attribute_name)
-
-                if isclass(attribute):            
-                    # Add the class to this package's variables
-                    try:
-                        model_name = attribute.MODEL
-                        if taskName in attribute.TASK:
-                            if not model_name in self.available_models:
-                                self.available_models += [model_name]
-                    except:
-                        continue
+        # compatible_models : list = []
+        for class_name in classes_dict.keys():
+            model_class = classes_dict.get(class_name)
+            try:
+                if self.NAME in model_class.TASK:
+                    self.compatible_models.append(class_name)
+            except:
+                continue
 
     def get_compatible_models(self) -> list:
-        return self.available_models
+        return self.compatible_models
+
+    
     
     @abstractmethod
     def set_executions(self, models : list, params : list) -> None:
