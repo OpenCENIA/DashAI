@@ -11,6 +11,7 @@ class TextClassificationTask(Task):
     Abstarct class for text classification tasks.
     Never use this class directly.
     """
+    NAME : str = "TextClassificationTask"
 
     # def get_parameters_structure(self) -> dict:
     #     """
