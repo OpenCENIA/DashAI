@@ -1,5 +1,5 @@
 from sklearn.ensemble import RandomForestClassifier
-from Models.classes.sklearn_like_model import SkleanLikeModel
+from Models.classes.sklearnLikeModel import SkleanLikeModel
 from Models.classes.numericClassificationModel import NumericClassificationModel
 import json
 

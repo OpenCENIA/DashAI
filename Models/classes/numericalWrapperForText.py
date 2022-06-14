@@ -1,4 +1,4 @@
-from Models.classes.sklearn_like_model import SkleanLikeModel
+from Models.classes.sklearnLikeModel import SkleanLikeModel
 from Models.classes.textClassificationModel import TextClassificationModel
 import json
 
