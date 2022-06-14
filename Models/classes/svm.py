@@ -1,11 +1,9 @@
 from sklearn.svm import SVC
-from Models.classes.model import Model
-
+from Models.classes.model import SkleanLikeModel
 import json
-from io import BytesIO
-import joblib
 
-class SVM(Model, SVC):
+
+class SVM(SkleanLikeModel, SVC):
     """
     Support vector machine. Supervised learning algorithm that separates two classes 
     in two spaces by means of a hyperplane. This hyperplane is defined as a vector 
@@ -15,22 +13,6 @@ class SVM(Model, SVC):
     TASK = ["TextClassificationSimpleTask"]
     with open(f'Models/parameters/models_schemas/{MODEL}.json') as f:
         SCHEMA = json.load(f)
-    
-    def save(self, filename=None):
-
-        if filename is None:
-            bytes_container = BytesIO()
-            joblib.dump(self, bytes_container)
-            bytes_container.seek(0)
-            return bytes_container.read()
-        else:
-            joblib.dump(self, filename)
-
-    @staticmethod
-    def load(filename):
-
-        model = joblib.load(filename)
-        return model
 
     # def __init__(self, **kwargs):
 

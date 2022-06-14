@@ -1,8 +1,8 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
-logger = logging.getLogger()
 
+logger = logging.getLogger()
 #version == 1.0.0
 class Model(metaclass=ABCMeta):
     """
