@@ -26,7 +26,8 @@ def introspect_classes():
 
     return classes_dict
 
-def filter_by_parent(parent_class_name, class_dict):
+def filter_by_parent(parent_class_name):
+    class_dict = introspect_classes()
     parent_class = class_dict[parent_class_name]
     filtered_dict = {}
 
