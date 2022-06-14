@@ -6,16 +6,11 @@ from dash import dcc, html, callback_context, MATCH, ALL
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-
-from Models.classes.getters import introspect_classes, filter_by_parent
-
 from TaskLib.task.taskMain import Task
 from TaskLib.task.numericClassificationTask import NumericClassificationTask
 from TaskLib.task.textClassificationTask import TextClassificationTask
-
 from models import Experiment, Execution
-
-from Models.classes.getters import introspect_classes, filter_by_parent
+from Models.classes.getters import filter_by_parent
 
 def parse_contents(contents, filename):
     """
@@ -101,7 +96,7 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict):
         parent_class_name = param_json_schema.get("parent")
         input_component = dcc.Dropdown(
             id=dict(type='form-input', name=f"{model_name}-{param_name}"),
-            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name,introspect_classes()).keys()],
+            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name).keys()],
             value=str(param_default)
         )
 
