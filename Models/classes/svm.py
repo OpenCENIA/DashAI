@@ -1,16 +1,16 @@
 from sklearn.svm import SVC
-from Models.classes.model import SkleanLikeModel
+from Models.classes.sklearn_like_model import SkleanLikeModel
+from Models.classes.numericClassificationModel import NumericClassificationModel
 import json
 
 
-class SVM(SkleanLikeModel, SVC):
+class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
     """
     Support vector machine. Supervised learning algorithm that separates two classes 
     in two spaces by means of a hyperplane. This hyperplane is defined as a vector 
     called support vector.
     """
     MODEL = "svm"
-    TASK = ["TextClassificationSimpleTask"]
     with open(f'Models/parameters/models_schemas/{MODEL}.json') as f:
         SCHEMA = json.load(f)
 

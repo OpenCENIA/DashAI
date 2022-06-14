@@ -1,5 +1,5 @@
 from abc import ABC,abstractmethod
-from lib2to3.pgen2.token import NAME
+from Models.classes.getters import filter_by_parent
 
 # from sqlalchemy import inspect
 # from Models.classes import *
@@ -8,8 +8,6 @@ from lib2to3.pgen2.token import NAME
 # from pathlib import Path
 # from importlib import import_module
 # from Models import classes
-
-from Models.classes.getters import introspect_classes, filter_by_parent
 
 
 class Task(ABC):
@@ -53,24 +51,18 @@ class Task(ABC):
     #     """
     #     pass
 
-    def __init__(self, taskName):
-        self.NAME = taskName
-        self.set_compatible_models(taskName)
+    def __init__(self):
 
-    def set_compatible_models(self, taskName) -> list:
+        self.set_compatible_models()
 
-        classes_dict = introspect_classes()
+    def set_compatible_models(self) -> None:
 
-        # compatible_models : list = []
-        for class_name in classes_dict.keys():
-            model_class = classes_dict.get(class_name)
-            try:
-                if self.NAME in model_class.TASK:
-                    self.compatible_models.append(class_name)
-            except:
-                continue
+        task_name = self.NAME if self.NAME else Exception("Need specify task name")
+        model_class_name = f"{task_name[:-4]}Model"
+        self.compatible_models = filter_by_parent(model_class_name)
 
     def get_compatible_models(self) -> list:
+
         return self.compatible_models
 
     

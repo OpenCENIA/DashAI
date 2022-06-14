@@ -10,8 +10,8 @@ from dash.exceptions import PreventUpdate
 from Models.classes.getters import introspect_classes, filter_by_parent
 
 from TaskLib.task.taskMain import Task
-from TaskLib.task.textClassificationSimpleTask import TextClassificationSimpleTask
-from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTask
+from TaskLib.task.numericClassificationTask import NumericClassificationTask
+from TaskLib.task.textClassificationTask import TextClassificationTask
 
 from models import Experiment, Execution
 
@@ -40,10 +40,12 @@ def get_task(task_type) -> Task:
     """
     #TODO get all available task
     #Similar to model's classes
-    if task_type == "TextClassificationSimpleTask":
-        return TextClassificationSimpleTask()
-    elif task_type == "TextClassificationMLabelTask":
-        return TextClassificationMLabelTask()
+    if task_type == "TextClassificationTask":
+        return TextClassificationTask()
+    elif task_type == "NumericClassificationTask":
+        return NumericClassificationTask()
+    else:
+        Exception("Task not recognized")
 
 def gen_input(model_name : str, param_name : str, param_json_schema : dict):
     """
