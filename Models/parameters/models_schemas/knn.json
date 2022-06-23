@@ -3,82 +3,37 @@
     "error_msg": "Los parámetros de KNN deben ser alguno(s) de ['k', 's', 'ignore_first_neighbours'].",
     "description": "KNN es un método de clasificación supervizado, que determina la probabildiad de que un elemento pertenezca a una determinada clase, considerando a sus k vecinos más cercanos.",
     "properties": {
-        "k": {
+        "n_neighbors": {
             "oneOf": [
                 {
-                    "error_msg": "El parámetro 'k' debe ser de tipo entero mayor o igual a 1.",
-                    "description": "El parámetro 'k' es el número de vecinos que se consideran en cada input para la clasificación. Debe ser de tipo entero mayor o igual a 1.",
+                    "error_msg": "El parámetro 'n_neighbors' debe ser de tipo entero mayor o igual a 1.",
+                    "description": "El parámetro 'n_neighbors' es el número de vecinos que se consideran en cada input para la clasificación. Debe ser de tipo entero mayor o igual a 1.",
                     "type": "integer",
-                    "default": 10,
+                    "default": 5,
                     "minimum": 1
-                },
-                {
-                    "items": {
-                        "error_msg": "El parámetro 'k' debe ser de tipo entero mayor o igual a 1.",
-                        "description": "El parámetro 'k' es el número de vecinos que se consideran en cada input para la clasificación. Debe ser de tipo entero mayor o igual a 1.",
-                        "type": "integer",
-                        "default": 10,
-                        "minimum": 1
-                    },
-                    "type": "array"
-                }
-                
+                }                
             ]
         },
-        "s": {
+        "weights": {
             "oneOf": [
                 {
-                    "error_msg": "El parámetro 's' debe ser de tipo number entre 0 y 1.",
-                    "description": "El parámetro 's' es de suavizamiento. Debe ser de tipo number entre 0 y 1.",
-                    "type": "number",
-                    "default": 1,
-                    "minimum": 0,
-                    "maximum": 1
-                },
-                {
-                    "items": {
-                        "error_msg": "El parámetro 's' debe ser de tipo number entre 0 y 1.",
-                        "description": "El parámetro 's' es de suavizamiento. Debe ser de tipo number entre 0 y 1.",
-                        "type": "number",
-                        "default": 1,
-                        "minimum": 0,
-                    "maximum": 1
-                    },
-                    "type": "array"
+                    "error_msg": "El parámetro 'weights' debe ser de 'uniform' o 'distance'.",
+                    "description": "El parámetro 'weights' debe ser de 'uniform' o 'distance'",
+                    "type": "string",
+                    "default": "uniform",
+                    "enum": ["uniform", "distance"]
                 }
-                
             ]
         },
-        "ignore_first_neighbours": {
+        "algorithm": {
             "oneOf": [
                 {
-                    "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                    "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.", 
-                    "type": "integer",
-                    "default": 0,
-                    "minimum": 0
-                },
-                {
-                    "items": {
-                        "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                        "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.", 
-                        "type": "integer",
-                        "default": 0,
-                        "minimum": 0
-                    },
-                    "type": "array"
-                }
-                
-            ]
-        },
-        "dummy-tokenizer": {
-            "oneOf": [
-                {
-                    "error_msg": "El parámetro 'dummy-tokenizer' debe ser un objeto de tipo tokenizer.",
-                    "description": "El parámetro 'dummy-tokenizer' permite seleccionar el tokenizador que usara el modelo.", 
-                    "type": "class",
-                    "parent": "Tokenizer"
-                }
+                    "error_msg": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.",
+                    "description": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.", 
+                    "type": "string",
+                    "default": "auto",
+                    "enum": ["auto", "ball_tree", "kd_tree", "brute"]
+                }  
             ]
         }
     },
