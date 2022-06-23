@@ -35,4 +35,4 @@ def filter_by_parent(parent_class_name):
         if issubclass(class_dict[class_name], parent_class) and parent_class_name != class_name:
             filtered_dict[class_name] = class_dict[class_name]
 
-    return 
+    return filtered_dict
