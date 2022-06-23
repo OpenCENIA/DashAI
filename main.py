@@ -427,17 +427,9 @@ def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
     # Create and configure task
     dataset_info = dataset['task_info']
     main_task : Task = get_task(dataset_info['task_type'])
-    main_task.config(dataset_info['task_parameters'])
-
-    # Obtain the selected models to execute
-    #selected_executions = [model[0] for model in executions]
-    
-    params = []
-    for exec in executions:
-        params.append(params_dict.get(exec))
 
     # Set and run experiment
-    main_task.set_executions(executions, params)
+    main_task.set_executions(executions, params_dict)
     main_task.run_experiments(dataset)
     
     # Store the results in the DB
