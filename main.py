@@ -6,16 +6,11 @@ from dash import dcc, html, callback_context, MATCH, ALL
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-
-from Models.classes.getters import introspect_classes, filter_by_parent
-
 from TaskLib.task.taskMain import Task
-from TaskLib.task.textClassificationSimpleTask import TextClassificationSimpleTask
-from TaskLib.task.textClassificationMLabelTask import TextClassificationMLabelTask
-
+from TaskLib.task.numericClassificationTask import NumericClassificationTask
+from TaskLib.task.textClassificationTask import TextClassificationTask
 from models import Experiment, Execution
-
-from Models.classes.getters import introspect_classes, filter_by_parent
+from Models.classes.getters import filter_by_parent
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
 
@@ -42,10 +37,12 @@ def get_task(task_type) -> Task:
     """
     #TODO get all available task
     #Similar to model's classes
-    if task_type == "TextClassificationSimpleTask":
-        return TextClassificationSimpleTask()
-    elif task_type == "TextClassificationMLabelTask":
-        return TextClassificationMLabelTask()
+    if task_type == "TextClassificationTask":
+        return TextClassificationTask()
+    elif task_type == "NumericClassificationTask":
+        return NumericClassificationTask()
+    else:
+        Exception("Task not recognized")
 
 def gen_input(model_name : str, param_name : str, param_json_schema : dict, parent_model_data: dict = None):
     """
@@ -115,7 +112,7 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict, pare
                     children=[
                         dcc.Dropdown(
                             id=dict(type = 'recursive-parameter-dropdown', name=f"{model_name}--{param_name}"),
-                            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name,introspect_classes()).keys()],
+                            options=[{'label':opt, 'value':opt} for opt in filter_by_parent(parent_class_name).keys()],
                             value=str(param_default)
                         )
                     ]
@@ -340,6 +337,7 @@ def store_parameters(n_clicks,
     Output('execution-config','style')],
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'))
+
 def load_dataset(contents, filename):
     """
     Receive the upload data input and stores in dataset. 
@@ -357,7 +355,6 @@ def load_dataset(contents, filename):
 
     # Create and configure task
     main_task : Task = get_task(task_type)
-
     # Add experiment to DB
     exp = Experiment(**dataset_info)
     db.session.add(exp)
@@ -418,7 +415,6 @@ def load_parameter_config(selected_exec):
     Input('params-dict', 'data')],
     prevent_initial_call = True)
 def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
-
     #TODO Change this condition to a button
     #if executions == [] or dataset == None:
     if n_clicks == 0:
@@ -434,9 +430,11 @@ def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
     
     # Store the results in the DB
     for model in main_task.experimentResults:
-        exec = Execution(exp_id, model, **main_task.experimentResults[model])
-        db.session.add(exec)
-    db.session.commit()
+        print(main_task.experimentResults[model])
+    #    exec = Execution(exp_id, model, **main_task.experimentResults[model])
+    #    db.session.add(exec)
+    #db.session.commit()
+    
 
     return html.Label("The experiment finish correctly")
 

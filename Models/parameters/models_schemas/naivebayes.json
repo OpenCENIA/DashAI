@@ -1,0 +1,29 @@
+{
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de Naive Bayes deben ser alguno(s) de ['priors', 'var_smoothing'].",
+    "description": "Naive Bayes es un método de aprendizaje supervisado, este utiliza el teorema de Bayes. Los parámetros de NB deben ser alguno(s) de ['priors', 'var_smoothing'].",
+    "properties": {
+        "priors": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'priors' debe ser de tipo array.",
+                    "description": "El parámetro 'priors' debe ser de tipo array.",
+                    "type": "array",
+                    "default": null
+                }
+            ]
+        },
+        "var_smoothing": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'var_smoothing' debe ser de tipo float.",
+                    "description": "El parámetro 'var_smoothing' debe ser de tipo float.",
+                    "type": "float",
+                    "default": 1e-9
+                }
+            ]
+        }
+    },
+    "type": "object"
+}
+

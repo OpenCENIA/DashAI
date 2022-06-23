@@ -1,3 +1,5 @@
 __pycache__/
 api_test.py
 dashAI.sqlite
+*.DS_Store
+.python-version

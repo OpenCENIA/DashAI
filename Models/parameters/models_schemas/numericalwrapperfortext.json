@@ -1,0 +1,28 @@
+{   
+    "additionalProperties": false,
+    "error_msg": "Los parámetros de NumericalWrapperForText deben ser alguno(s) de ['numeric_classifier', 'tokenizer'].",
+    "description": "NumericalWrapperForText es un modelo que permite clasificar texto usando clasificadores numericas y un tokenizador.",
+    "properties": {
+        "numeric_classifier": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'numeric_classifier' debe ser un model que implemente la clase NumericClassificationModel.",
+                    "description": "El parámetro 'numeric_classifier' debe ser un model que implemente la clase NumericClassificationModel.",
+                    "type": "class",
+                    "parent": "NumericClassificationModel"
+                }
+            ]
+        },
+        "tokenizer": {
+            "oneOf": [
+                {
+                    "error_msg": "El parámetro 'tokenizer' debe ser un objeto de tipo tokenizer.",
+                    "description": "El parámetro 'tokenizer' permite seleccionar el tokenizador que usara el modelo.", 
+                    "type": "class",
+                    "parent": "Tokenizer"
+                }
+            ]
+        }
+    },
+    "type": "object"  
+}

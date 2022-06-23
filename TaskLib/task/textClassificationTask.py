@@ -1,3 +1,4 @@
+from TaskLib.task.numericClassificationTask import NumericClassificationTask
 from TaskLib.task.taskMain import Task
 
 from sklearn.model_selection import GridSearchCV
@@ -10,6 +11,7 @@ class TextClassificationTask(Task):
     Abstarct class for text classification tasks.
     Never use this class directly.
     """
+    NAME : str = "TextClassificationTask"
 
     # def get_parameters_structure(self) -> dict:
     #     """
@@ -56,11 +58,12 @@ class TextClassificationTask(Task):
     
     def set_executions(self, models: list, params: list):
 
-        self.gridExecutions : list = []
-        for i in range(len(models)):
-            actualExecution = globals().get(models[i])()
-            grid = GridSearchCV(actualExecution, params[i], cv=2)
-            self.gridExecutions.append(grid)
+        pass
+        # self.gridExecutions : list = []
+        # for i in range(len(models)):
+        #     actualExecution = globals().get(models[i])()
+        #     grid = GridSearchCV(actualExecution, params[i], cv=2)
+        #     self.gridExecutions.append(grid)
     
     def run_experiments(self, input_data: dict):
         
@@ -79,23 +82,24 @@ class TextClassificationTask(Task):
         prep_train_x = tf_transformer.transform(X_train_counts)
         prep_test_x = tf_transformer.transform(X_test_counts)
 
-        self.experimentResults = {}
+        # self.experimentResults = {}
 
-        for grid in self.gridExecutions:
-            grid.fit(prep_train_x, train_y)
+        # for grid in self.gridExecutions:
+        #     grid.fit(prep_train_x, train_y)
 
-            trainResults = grid.score(prep_train_x, train_y)
-            testResults = grid.score(prep_test_x, test_y)
-            parameters = grid.best_params_      
-            execution = grid.best_estimator_
-            executionBytes = execution.save()
+        #     trainResults = grid.score(prep_train_x, train_y)
+        #     testResults = grid.score(prep_test_x, test_y)
+        #     parameters = grid.best_params_      
+        #     execution = grid.best_estimator_
+        #     executionBytes = execution.save()
 
-            self.experimentResults[execution.MODEL] = {
-                "train_results" : trainResults,
-                "test_results" : testResults,
-                "parameters" : parameters,
-                "executionBytes" : executionBytes
-            }
+        #     self.experimentResults[execution.MODEL] = {
+        #         "train_results" : trainResults,
+        #         "test_results" : testResults,
+        #         "parameters" : parameters,
+        #         "executionBytes" : executionBytes
+        #     }
+
 
 def parse_input(input_data):
     #TODO reshape only if input is 1D
