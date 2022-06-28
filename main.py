@@ -104,8 +104,6 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict, pare
     
     elif param_type == "class":
         parent_class_name = param_json_schema.get("parent")
-        f = open(f'Models/parameters/models_schemas/tweetTok.json')
-        f2 = open(f'Models/parameters/models_schemas/normalTok.json')
         input_component = html.Div(
             children=[
                 html.Div(
@@ -119,10 +117,7 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict, pare
                 ),
                 dbc.Accordion(
                     id = dict(type="recursive-parameter-accordion", name=f"{model_name}--{param_name}"),
-                    children =[
-                        #dbc.AccordionItem([gen_input("tweetTok", "tweetTok", json.load(f), parent_model_data={"model":model_name, "parameter": param_name})], title="tweetTok parameters"),
-                        #dbc.AccordionItem([gen_input("normalTok", "normalTok", json.load(f2), parent_model_data={"model":model_name, "parameter": param_name})], title="normalTok parameters")
-                    ],
+                    children =[],
                     flush=True
 
                 )
@@ -179,7 +174,10 @@ app.layout = html.Div([
                          value=[],
                      )],style={'padding': 10, 'flex': 1}),
             ],style={'display':'none'}
-        )])
+        ),
+        #models_table(),
+        #parameter_config_modal()
+        ])
     ]),
     dbc.Col([
         dbc.Row([
@@ -240,7 +238,12 @@ def display_recursive_parameter_form(rec_parameter_selected_options, rec_paramet
 
     forms = []
     for option, id in zip(rec_parameter_selected_options, rec_parameter_dropdown_ids):
-        mapped_option = tokenizer_map[option]
+        #for dropdown selectors that don't have an option selected yet
+        if option == 'None':
+            forms.append(html.Div())
+            continue
+
+        mapped_option = tokenizer_map[option] if option in tokenizer_map.keys() else option
         f = open(f'Models/parameters/models_schemas/{mapped_option}.json')
         name = id["name"].split("--")
 
@@ -285,18 +288,17 @@ def store_parameters(n_clicks,
             default_params_dict[sel_exec] = sel_exec_default_params
         return default_params_dict, str(default_params_dict)
 
-    #Retrieve and store parameters defined by the user when "Submit" button is pressed.
+    #Retrieve and store parameters defined by the user when "Save" button is pressed.
     elif callback_context.triggered[0]['prop_id'] == 'button-submit.n_clicks':
         params_dict = {}
         for label, value in zip(labels[1:], values[1:]):
             params_dict[label[:-2]] = value
         output_params_dict  = {}
         if prev_params_dict is None:
-             output_params_dict = {labels[0][:-2] : params_dict}
+            output_params_dict = {labels[0][:-2] : params_dict}
         else:
             prev_params_dict[labels[0][:-2]] = params_dict
             output_params_dict =  prev_params_dict
-        
         #recursive parameters
 
         rec_parameters_dict = {}
@@ -318,6 +320,7 @@ def store_parameters(n_clicks,
                 #resets the values to add the next recursive parameter form.
                 rec_parameters_dict = {}
                 rec_param_name = name[0]
+                param_name_in_model = id["model_parameter"]
                 continue
 
             rec_parameters_dict[label[:-2]] = value
@@ -327,9 +330,8 @@ def store_parameters(n_clicks,
         output_params_dict[model][param_name_in_model] = {"value": rec_param_name, 'parameters': rec_parameters_dict}
 
         return output_params_dict, str(output_params_dict)
-    
-    
- 
+
+        
 @app.callback([Output('dataset', 'data'),
     Output('experiment-id', 'data'),
     Output('dataset-info', 'children'),
