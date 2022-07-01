@@ -3,3 +3,4 @@ api_test.py
 dashAI.sqlite
 
 .idea/
+venv/
