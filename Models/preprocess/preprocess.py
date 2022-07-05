@@ -5,7 +5,8 @@ from Models.preprocess.tokenizer.tokenizer_cont import TokenizerContainer
 
 logger = logging.getLogger()
 
-#version == 1.0.0
+
+# version == 1.0.0
 class PreProcess(metaclass=ABCMeta):
     """
     Clase (abstracta) padre de los preprocesamientos.
@@ -13,6 +14,7 @@ class PreProcess(metaclass=ABCMeta):
     Args:
         metaclass (ABCMeta): Metaclase. Default: ABCMeta.
     """
+
     def __init__(self, dic):
         """
         dic (dict): Diccionario que contiene informacion para crear el
@@ -28,6 +30,7 @@ class PreProcess(metaclass=ABCMeta):
         text (array-like): Array que contiene el input en formato de texto.
         """
         pass
+
 
 if __name__ == "__main__":
     pass

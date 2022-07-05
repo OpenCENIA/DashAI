@@ -2,28 +2,28 @@ import logging
 from abc import ABCMeta, abstractmethod
 
 
-logger = logging.getLogger()
-#version == 1.0.0
+
+# version == 1.0.0
 class Model(metaclass=ABCMeta):
     """
     Abstract class of all machine learning models.
     The models must implement the save and load methods.
     """
 
-    #TODO implement a check_params method to check the params using the JSON schema file.
-    #TODO implement a method to check the initialization of TASK an task params variables.
+    # TODO implement a check_params method to check the params
+    #  using the JSON schema file.
+    # TODO implement a method to check the initialization of TASK
+    #  an task params variables.
 
     @abstractmethod
     def save(self, filename=None):
         """
         Stores an instance of a model.
 
-        filename (Str): Indicates where to store the model, if filename is None, this method
-        returns a bytes array with the model.
-
+        filename (Str): Indicates where to store the model,
+        if filename is None, this method returns a bytes array with the model.
         """
         pass
-
 
     @staticmethod
     def load(filename):
@@ -46,7 +46,7 @@ class Model(metaclass=ABCMeta):
     # def preprocess(self, X):
     #     """
     #     Método que se usa para preprocesar los datos y, de esta forma,
-    #     generar el input que recibe el modelo en fit, predict y predict_proba.
+    #     generar el input que recibe el modelo en fit, predict y predict_proba
 
     #     X (array-like): Arreglo donde cada componente tiene un
     #                     texto plano que necesita ser preprocesado.
@@ -60,8 +60,9 @@ class Model(metaclass=ABCMeta):
 
     #     X (array-like): Arreglo donde cada componente tiene un texto ya
     #                     preprocesado por el preprocess.
-    #     y (array-like): Arreglo donde cada componente tiene un arreglo de valores
-    #                     binarios indicando si se prensentan, o no, las labels.
+    #     y (array-like): Arreglo donde cada componente tiene un arreglo de
+    #                     valores binarios indicando si se prensentan,
+    #                     o no, las labels.
     #     """
     #     pass
 

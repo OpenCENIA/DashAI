@@ -1,10 +1,10 @@
 from TaskLib.task.numericClassificationTask import NumericClassificationTask
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.model_selection import GridSearchCV
+
 from TaskLib.task.taskMain import Task
 
-from sklearn.model_selection import GridSearchCV
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
-import numpy as np
 
 class TextClassificationTask(Task):
     """
@@ -15,8 +15,8 @@ class TextClassificationTask(Task):
 
     # def get_parameters_structure(self) -> dict:
     #     """
-    #     The available params are LABEL and INSTANCE, the expected 
-    #     values for both are SINGLE and MULTI, and the readable form  
+    #     The available params are LABEL and INSTANCE, the expected
+    #     values for both are SINGLE and MULTI, and the readable form
     #     for both are Single and Multi
     #     """
     #     structure = {}
@@ -36,7 +36,7 @@ class TextClassificationTask(Task):
     #     """
     #     self.label : str = params.get("LABEL")
     #     self.instance : str = params.get("INSTANCE")
-    
+
     # def get_parameters(self) -> dict:
     #     params = {}
 
@@ -44,18 +44,19 @@ class TextClassificationTask(Task):
     #     params["INSTANCE"] = self.instance
 
     #     return params
-    
+
     # def get_compatible_models(self) -> list:
-        
+
     #     compatible_models : list = []
     #     for modelName in get_available_models():
     #         modelClass = globals().get(modelName)
     #         if "TEXT" in modelClass.TASK:
-    #             if modelClass.INSTANCE == self.instance and modelClass.LABEL == self.label:
+    #             if modelClass.INSTANCE == self.instance and
+    #             modelClass.LABEL == self.label:
     #                 compatible_models.append(modelName)
-        
+
     #     return compatible_models
-    
+
     def set_executions(self, models: list, params: list):
 
         pass
@@ -66,7 +67,7 @@ class TextClassificationTask(Task):
         #     self.gridExecutions.append(grid)
     
     def run_experiments(self, input_data: dict):
-        
+
         train_x, train_y, test_x, test_y = parse_input(input_data)
 
         count_vect = CountVectorizer()
@@ -75,7 +76,7 @@ class TextClassificationTask(Task):
 
         X_train_counts = count_vect.transform(train_x)
         X_test_counts = count_vect.transform(test_x)
- 
+
         tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
         tf_transformer = TfidfTransformer(use_idf=False).fit(X_test_counts)
 
@@ -101,8 +102,9 @@ class TextClassificationTask(Task):
         #     }
 
 
+
 def parse_input(input_data):
-    #TODO reshape only if input is 1D
+    # TODO reshape only if input is 1D
     x_train = np.array(input_data["train"]["x"])
     y_train = np.array(input_data["train"]["y"])
     x_test = np.array(input_data["test"]["x"])

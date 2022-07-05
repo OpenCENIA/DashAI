@@ -1,9 +1,9 @@
-# Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 
 import json, dash, base64, db
 from dash import dcc, html, callback_context, MATCH, ALL
 import dash_bootstrap_components as dbc
+from dash import ALL, dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from TaskLib.task.taskMain import Task
@@ -18,18 +18,17 @@ def parse_contents(contents, filename):
     """
     Loads the input data, if it's format is JSON, otherwise throw an exception
     """
-    _ , content_string = contents.split(',')
+    _, content_string = contents.split(",")
 
     decoded = base64.b64decode(content_string)
     try:
-        if 'json' in filename:
+        if "json" in filename:
             json_file = json.loads(decoded)
     except Exception as e:
         print(e)
-        return html.Div([
-            "There was an error processing the file."
-        ])
+        return html.Div(["There was an error processing the file."])
     return json_file
+
 
 def get_task(task_type) -> Task:
     """
@@ -79,13 +78,13 @@ def gen_input(model_name : str, param_name : str, param_json_schema : dict, pare
                 id=id_dict,
                 type="number",
                 min=param_json_schema.get("minimum"),
-                value=param_default
+                value=param_default,
             )
         else:
             input_component = dcc.Input(
                 id=id_dict,
                 type="number",
-                value=param_default
+                value=param_default,
             )
     elif param_type == "integer":
         input_component = dcc.Input(
@@ -186,12 +185,89 @@ app.layout = html.Div([
             id='parameter',
             children=[
                 html.Div(
-                    id='exec-selection',
-                    children=[
-                        dcc.Dropdown(
-                            id='selected-exec',
-                            options=[],
-                            value=[]
+                    id="test-parameters",
+                    children=[html.H2("Muestra los parámetros")],
+                ),
+                dbc.Col(
+                    [
+                        dbc.Row(
+                            [
+                                html.H2("Load Dataset"),
+                                # Dataset Upload
+                                dcc.Upload(
+                                    id="upload-data",
+                                    children=html.Div(
+                                        ["Upload your ", html.A("Dataset")]
+                                    ),
+                                    style={
+                                        "width": "100%",
+                                        "height": "60px",
+                                        "lineHeight": "60px",
+                                        "borderWidth": "1px",
+                                        "borderStyle": "dashed",
+                                        "borderRadius": "5px",
+                                        "textAlign": "center",
+                                    },
+                                ),
+                                html.Br(),
+                                # Dataset Info
+                                html.Div(id="dataset-info"),
+                                html.Br(),
+                                # Configure Executions
+                                html.Div(
+                                    id="execution-config",
+                                    children=[
+                                        html.Label("Select the models to train: "),
+                                        html.Div(
+                                            children=[
+                                                dcc.Checklist(
+                                                    id="executions",
+                                                    options=[],
+                                                    value=[],
+                                                )
+                                            ],
+                                            style={"padding": 10, "flex": 1},
+                                        ),
+                                    ],
+                                    style={"display": "none"},
+                                ),
+                            ]
+                        )
+                    ]
+                ),
+                dbc.Col(
+                    [
+                        dbc.Row(
+                            [
+                                # Parameters
+                                html.Div(
+                                    id="parameter",
+                                    children=[
+                                        html.Div(
+                                            id="exec-selection",
+                                            children=[
+                                                dcc.Dropdown(
+                                                    id="selected-exec",
+                                                    options=[],
+                                                    value=[],
+                                                )
+                                            ],
+                                            style={"display": "none"},
+                                        ),
+                                        html.Div(id="parameter-config"),
+                                        dbc.Button(
+                                            "Submit",
+                                            color="dark",
+                                            className="me-1",
+                                            id="button-submit",
+                                        ),
+                                    ],
+                                ),
+                                # gen_input("SVM", "SVM", json.load(f)),
+                                html.Br(),
+                                # Experiment Results
+                                html.Div(id="experiment-results"),
+                            ]
                         )
                     ],
                     style={'display':'none'}),
@@ -349,16 +425,16 @@ def store_parameters(n_clicks,
 
 def load_dataset(contents, filename):
     """
-    Receive the upload data input and stores in dataset. 
+    Receive the upload data input and stores in dataset.
     Obtain the available models and shows to the user.
     """
-    if contents == None or filename == None:
+    if contents is None or filename is None:
         raise PreventUpdate
 
     # Get dataset
-    dataset : dict = parse_contents(contents, filename)
-    dataset_info : dict = dataset.get('task_info')
-    task_type : str = dataset_info.get('task_type')
+    dataset: dict = parse_contents(contents, filename)
+    dataset_info: dict = dataset.get("task_info")
+    task_type: str = dataset_info.get("task_type")
 
     dataset_information = html.H2(f"Task type: {task_type}")
 
@@ -371,13 +447,11 @@ def load_dataset(contents, filename):
     exp_id = exp.id
 
     # Get and show available models
-    available_models : list  = main_task.get_compatible_models()
-    options : list = [{'label':model, 'value': model} for model in available_models]
+    available_models: list = main_task.get_compatible_models()
+    options: list = [{"label": model, "value": model} for model in available_models]
 
     # Make visible the execution-config div
     style = {}
-    
-    return dataset, exp_id, dataset_information, options, {'style':style}
 
 @app.callback(Output('selected-exec', 'options'),
     Output('exec-selection', 'style'),
@@ -385,7 +459,7 @@ def load_dataset(contents, filename):
     Input('executions', 'value'))
 def enable_parameters(executions):
     """
-    Get the selected models, and load a dropdown list to select any and 
+    Get the selected models, and load a dropdown list to select any and
     configure its parameters.
     """
     if executions == []:
@@ -406,8 +480,8 @@ def load_parameter_config(selected_exec):
     """
     if selected_exec == []:
         raise PreventUpdate
-    
-    f = open(f'Models/parameters/models_schemas/{selected_exec}.json')
+
+    f = open(f"Models/parameters/models_schemas/{selected_exec}.json")
     children = gen_input(selected_exec, selected_exec, json.load(f))
     return children, [], {'style': {}}
 
@@ -436,7 +510,7 @@ def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
     # Set and run experiment
     main_task.set_executions(executions, params_dict)
     main_task.run_experiments(dataset)
-    
+
     # Store the results in the DB
     for model in main_task.experimentResults:
         print(main_task.experimentResults[model])
@@ -447,6 +521,7 @@ def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
 
     return html.Label("The experiment finish correctly")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     db.Base.metadata.create_all(db.engine)
     app.run_server(debug=True)

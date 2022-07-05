@@ -6,10 +6,11 @@ import json
 
 class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
     """
-    Support vector machine. Supervised learning algorithm that separates two classes 
-    in two spaces by means of a hyperplane. This hyperplane is defined as a vector 
-    called support vector.
+    Support vector machine. Supervised learning algorithm that separates
+    two classes in two spaces by means of a hyperplane. This hyperplane is
+    defined as a vector called support vector.
     """
+
     MODEL = "svm"
     with open(f'Models/parameters/models_schemas/{MODEL}.json') as f:
         SCHEMA = json.load(f)
@@ -18,16 +19,20 @@ class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
 
     #     """
     #     Kwargs:
-    #         preprocess (Preprocess): preprocesamiento instanciado, que contiene
-    #                                     parámetros y tokenizadores inicializados.
+    #         preprocess (Preprocess): preprocesamiento instanciado,
+    #         que contiene parámetros y tokenizadores inicializados.
     #         params (dic): diccionario que contiene los hiperparámetros que
     #                         utiliza el modelo.
 
     #     params (dict):
-    #         probability (bool): True si se quiere predecir por probabilidades. Default: True.
-    #         kernel (str): linear, poly, rbf, sigmoid. Es el kernel a utilizar en el modelo. Default=rbf
-    #         gamma (str o float): scale, auto} o float, default=’scale’. Coeficiente para los kernels rbf, poly y sigmoid.
-    #         coef0 (float): Default=0.0. Valor independiente del kernel. Solo es significante para kernel poly y sigmoid.
+    #         probability (bool): True si se quiere predecir
+    #         por probabilidades. Default: True.
+    #         kernel (str): linear, poly, rbf, sigmoid.
+    #         Es el kernel a utilizar en el modelo. Default=rbf
+    #         gamma (str o float): scale, auto} o float, default=’scale’.
+    #         Coeficiente para los kernels rbf, poly y sigmoid.
+    #         coef0 (float): Default=0.0. Valor independiente del kernel.
+    #         Solo es significante para kernel poly y sigmoid.
     #     """
 
     #     preprocess = kwargs.get('preprocess', None)
@@ -40,7 +45,7 @@ class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
     #     self.params['probability'] = self.params.get('probability', True)
     #     self.params['kernel'] = self.params.get('kernel', 'rbf')
     #     self.params['gamma'] = self.params.get('gamma', 0.1)
-        
+
     #     self.kwargs = kwargs
     #     self.ml_svm = OneVsRestClassifier(SVC(**self.params))
 
@@ -48,8 +53,10 @@ class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
     #     """
     #     Método que se usa para entrenar el modelo, no debe retornar nada.
 
-    #     x (array-like): Arreglo donde cada componente tiene un texto ya preprocesado por el preprocess.
-    #     y (array-like): Arreglo donde cada componente tiene un arreglo binario indicando si se prensenta o no la label
+    #     x (array-like): Arreglo donde cada componente tiene un texto
+    #     ya preprocesado por el preprocess.
+    #     y (array-like): Arreglo donde cada componente tiene un arreglo
+    #     binario indicando si se prensenta o no la label
     #     """
 
     #     self.ml_svm.fit(x, y)

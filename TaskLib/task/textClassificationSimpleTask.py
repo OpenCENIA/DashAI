@@ -1,5 +1,6 @@
 from TaskLib.task.textClassificationTask import TextClassificationTask
 
+
 class TextClassificationSimpleTask(TextClassificationTask):
     """
     Most common text classification task, the input of this task
