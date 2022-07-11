@@ -12,7 +12,7 @@
                     "default": 5,
                     "minimum": 1
 <<<<<<< HEAD
-                }                
+                }
 =======
                 },
                 {
@@ -49,11 +49,11 @@
                 {
 <<<<<<< HEAD
                     "error_msg": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.",
-                    "description": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.", 
+                    "description": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.",
                     "type": "string",
                     "default": "auto",
                     "enum": ["auto", "ball_tree", "kd_tree", "brute"]
-                }  
+                }
 =======
                     "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
                     "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.",

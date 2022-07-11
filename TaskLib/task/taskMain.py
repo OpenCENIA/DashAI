@@ -1,6 +1,9 @@
-from abc import ABC,abstractmethod
-from Models.classes.getters import filter_by_parent
+from abc import ABC
+
 import numpy as np
+
+from Models.classes.getters import filter_by_parent
+
 
 class Task(ABC):
     """
@@ -9,20 +12,10 @@ class Task(ABC):
     """
 
     # task name, present in the compatible models
-    NAME : str = ""
-    compatible_models :list = []
-    
-    def __init__(self):
-        self.set_compatible_models()
-
-    def set_compatible_models(self) -> None:
-
-        task_name = self.NAME if self.NAME else Exception("Need specify task name")
-        model_class_name = f"{task_name[:-4]}Model"
-        self.compatible_models = filter_by_parent(model_class_name)
+    NAME: str = ""
+    compatible_models: list = []
 
     def __init__(self):
-
         self.set_compatible_models()
 
     def set_compatible_models(self) -> None:
@@ -35,7 +28,7 @@ class Task(ABC):
 
         return self.compatible_models
 
-    def set_executions(self, models : list, params : dict) -> None:
+    def set_executions(self, models: list, params: dict) -> None:
         """
         This method configures one execution per model in models with the parameters
         in the params[model] dictionary.
@@ -43,17 +36,18 @@ class Task(ABC):
         """
         # TODO
         # Generate a Grid to search the best model
-        self.executions : list = []
+        self.executions: list = []
         for model in models:
             actualExecution = self.compatible_models[model]
             self.executions.append(actualExecution(**params[model]))
-    
-    def run_experiments(self, input_data : dict):
+
+    def run_experiments(self, input_data: dict):
         """
-        This method train all the executions in self.executions with the data in input_data.
+        This method train all the executions in self.executions with the data in
+        input_data.
         The input_data dictionary must have train and test keys to perform the training.
         The test results were temporaly save in self.experimentResults.
-        """        
+        """
         x_train = np.array(input_data["train"]["x"])
         y_train = np.array(input_data["train"]["y"])
         x_test = np.array(input_data["test"]["x"])
@@ -85,8 +79,8 @@ class Task(ABC):
             executionBytes = execution.save()
 
             self.experimentResults[execution.MODEL] = {
-                "train_results" : trainResults,
-                "test_results" : testResults,
-                "parameters" : parameters,
-                "executionBytes" : executionBytes
+                "train_results": trainResults,
+                "test_results": testResults,
+                "parameters": parameters,
+                "executionBytes": executionBytes,
             }

@@ -1,7 +1,9 @@
-from sklearn.svm import SVC
-from Models.classes.sklearnLikeModel import SkleanLikeModel
-from Models.classes.numericClassificationModel import NumericClassificationModel
 import json
+
+from sklearn.svm import SVC
+
+from Models.classes.numericClassificationModel import NumericClassificationModel
+from Models.classes.sklearnLikeModel import SkleanLikeModel
 
 
 class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
@@ -12,7 +14,7 @@ class SVM(SkleanLikeModel, NumericClassificationModel, SVC):
     """
 
     MODEL = "svm"
-    with open(f'Models/parameters/models_schemas/{MODEL}.json') as f:
+    with open(f"Models/parameters/models_schemas/{MODEL}.json") as f:
         SCHEMA = json.load(f)
 
     # def __init__(self, **kwargs):

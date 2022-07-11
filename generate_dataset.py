@@ -5,7 +5,7 @@ csvFilePath = "Example_dataset/IMDB_Sentiment.csv"
 jsonFilePath = "Example_dataset/ImdbSentimentDataset.json"
 
 size = 100
-every = 4 # Every 'every' train registers, one is assigned to test dataset
+every = 4  # Every 'every' train registers, one is assigned to test dataset
 
 data = {"train": {"x": [], "y": []}, "test": {"x": [], "y": []}}
 

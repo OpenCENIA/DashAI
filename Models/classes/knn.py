@@ -1,7 +1,9 @@
-from sklearn.neighbors import KNeighborsClassifier
-from Models.classes.sklearnLikeModel import SkleanLikeModel
-from Models.classes.numericClassificationModel import NumericClassificationModel
 import json
+
+from sklearn.neighbors import KNeighborsClassifier
+
+from Models.classes.numericClassificationModel import NumericClassificationModel
+from Models.classes.sklearnLikeModel import SkleanLikeModel
 
 
 class KNN(SkleanLikeModel, NumericClassificationModel, KNeighborsClassifier):
@@ -12,5 +14,5 @@ class KNN(SkleanLikeModel, NumericClassificationModel, KNeighborsClassifier):
     """
 
     MODEL = "knn"
-    with open(f'Models/parameters/models_schemas/{MODEL}.json') as f:
+    with open(f"Models/parameters/models_schemas/{MODEL}.json") as f:
         SCHEMA = json.load(f)

@@ -1,4 +1,4 @@
-{   
+{
     "additionalProperties": false,
     "error_msg": "Los parámetros de TweetTok deben ser alguno(s) de ['useTwitterStopWords', 'first', 'second'].",
     "description": "TweetTok es un tokenizador moderno adaptado para procesar particularmente bien tweets.",

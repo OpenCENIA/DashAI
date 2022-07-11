@@ -1,4 +1,4 @@
-{   
+{
     "additionalProperties": false,
     "error_msg": "Los parámetros de normalTok deben ser alguno(s) de ['useStopWords', 'alpha', 'beta'].",
     "description": "NormalTok es un tokenizador estandar de machine learning.",

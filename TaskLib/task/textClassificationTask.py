@@ -1,7 +1,4 @@
-from TaskLib.task.numericClassificationTask import NumericClassificationTask
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.model_selection import GridSearchCV
 
 from TaskLib.task.taskMain import Task
 
@@ -11,7 +8,8 @@ class TextClassificationTask(Task):
     Abstarct class for text classification tasks.
     Never use this class directly.
     """
-    NAME : str = "TextClassificationTask"
+
+    NAME: str = "TextClassificationTask"
 
     # def get_parameters_structure(self) -> dict:
     #     """
@@ -65,23 +63,23 @@ class TextClassificationTask(Task):
         #     actualExecution = globals().get(models[i])()
         #     grid = GridSearchCV(actualExecution, params[i], cv=2)
         #     self.gridExecutions.append(grid)
-    
+
     def run_experiments(self, input_data: dict):
+        pass
+        # train_x, train_y, test_x, test_y = parse_input(input_data)
 
-        train_x, train_y, test_x, test_y = parse_input(input_data)
+        # count_vect = CountVectorizer()
+        # count_vect.fit(train_x)
+        # count_vect.fit(test_x)
 
-        count_vect = CountVectorizer()
-        count_vect.fit(train_x)
-        count_vect.fit(test_x)
+        # X_train_counts = count_vect.transform(train_x)
+        # X_test_counts = count_vect.transform(test_x)
 
-        X_train_counts = count_vect.transform(train_x)
-        X_test_counts = count_vect.transform(test_x)
+        # tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
+        # tf_transformer = TfidfTransformer(use_idf=False).fit(X_test_counts)
 
-        tf_transformer = TfidfTransformer(use_idf=False).fit(X_train_counts)
-        tf_transformer = TfidfTransformer(use_idf=False).fit(X_test_counts)
-
-        prep_train_x = tf_transformer.transform(X_train_counts)
-        prep_test_x = tf_transformer.transform(X_test_counts)
+        # prep_train_x = tf_transformer.transform(X_train_counts)
+        # prep_test_x = tf_transformer.transform(X_test_counts)
 
         # self.experimentResults = {}
 
@@ -90,7 +88,7 @@ class TextClassificationTask(Task):
 
         #     trainResults = grid.score(prep_train_x, train_y)
         #     testResults = grid.score(prep_test_x, test_y)
-        #     parameters = grid.best_params_      
+        #     parameters = grid.best_params_
         #     execution = grid.best_estimator_
         #     executionBytes = execution.save()
 
@@ -100,7 +98,6 @@ class TextClassificationTask(Task):
         #         "parameters" : parameters,
         #         "executionBytes" : executionBytes
         #     }
-
 
 
 def parse_input(input_data):

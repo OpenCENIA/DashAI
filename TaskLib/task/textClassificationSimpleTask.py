@@ -7,8 +7,7 @@ class TextClassificationSimpleTask(TextClassificationTask):
     is a dataset with only one document and one label per example.
     """
 
-    NAME : str = "TextClassificationSimpleTask"
+    NAME: str = "TextClassificationSimpleTask"
 
     def __init__(self):
         super().__init__(self.NAME)
-        
