@@ -1,5 +1,5 @@
+# Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
-
 import base64
 import json
 
@@ -28,7 +28,6 @@ def parse_contents(contents, filename):
     Loads the input data, if it's format is JSON, otherwise throw an exception
     """
     _, content_string = contents.split(",")
-
     decoded = base64.b64decode(content_string)
     try:
         if "json" in filename:
@@ -65,7 +64,6 @@ def gen_input(
     param_type = param_json_schema.get("type")
     param_default = param_json_schema.get("default", None)
     input_component = None
-
     id_dict = dict(type="form-input", name=f"{model_name}--{param_name}")
     label_id_dict = dict(type="form-label", name=f"{model_name}--{param_name}")
     if parent_model_data is not None:
@@ -73,7 +71,6 @@ def gen_input(
         id_dict["model_parameter"] = parent_model_data["parameter"]
         label_id_dict["model"] = parent_model_data["model"]
         label_id_dict["model_parameter"] = parent_model_data["parameter"]
-
     if param_type == "string":
         input_component = dcc.Dropdown(
             id=id_dict,
@@ -82,7 +79,6 @@ def gen_input(
             ],
             value=param_default,
         )
-
     elif param_type == "boolean":
         input_component = dcc.Dropdown(
             id=id_dict,
@@ -98,11 +94,7 @@ def gen_input(
                 value=param_default,
             )
         else:
-            input_component = dcc.Input(
-                id=id_dict,
-                type="number",
-                value=param_default,
-            )
+            input_component = dcc.Input(id=id_dict, type="number", value=param_default)
     elif param_type == "integer":
         input_component = dcc.Input(
             id=id_dict,
@@ -110,7 +102,6 @@ def gen_input(
             value=param_default,
             step=1,
         )
-
     elif param_type == "object":
         input_component = html.Div(
             id=id_dict,
@@ -154,7 +145,6 @@ def gen_input(
                 ),
             ]
         )
-
     return html.Div(
         id=f"{model_name}-{param_name}-div",
         children=[html.Label(f"{param_name}: ", id=label_id_dict), input_component],
@@ -167,7 +157,8 @@ def gen_input(
 app.layout = html.Div(
     [
         dbc.Row(
-            [  # html.Div(id='test-parameters', children = [html.H2()]),
+            [
+                # html.Div(id='test-parameters', children = [html.H2()]),
                 dbc.Col(
                     [
                         dbc.Row(
@@ -226,109 +217,12 @@ app.layout = html.Div(
                                     id="parameter",
                                     children=[
                                         html.Div(
-                                            id="test-parameters",
+                                            id="exec-selection",
                                             children=[
-                                                html.H2("Muestra los parámetros")
-                                            ],
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                dbc.Row(
-                                                    [
-                                                        html.H2("Load Dataset"),
-                                                        # Dataset Upload
-                                                        dcc.Upload(
-                                                            id="upload-data",
-                                                            children=html.Div(
-                                                                [
-                                                                    "Upload your ",
-                                                                    html.A("Dataset"),
-                                                                ]
-                                                            ),
-                                                            style={
-                                                                "width": "100%",
-                                                                "height": "60px",
-                                                                "lineHeight": "60px",
-                                                                "borderWidth": "1px",
-                                                                "borderStyle": "dashed",
-                                                                "borderRadius": "5px",
-                                                                "textAlign": "center",
-                                                            },
-                                                        ),
-                                                        html.Br(),
-                                                        # Dataset Info
-                                                        html.Div(id="dataset-info"),
-                                                        html.Br(),
-                                                        # Configure Executions
-                                                        html.Div(
-                                                            id="execution-config",
-                                                            children=[
-                                                                html.Label(
-                                                                    "Select the models"
-                                                                    "to train: "
-                                                                ),
-                                                                html.Div(
-                                                                    children=[
-                                                                        dcc.Checklist(
-                                                                            id="exe"
-                                                                            "cutions",
-                                                                            options=[],
-                                                                            value=[],
-                                                                        )
-                                                                    ],
-                                                                    style={
-                                                                        "padding": 10,
-                                                                        "flex": 1,
-                                                                    },
-                                                                ),
-                                                            ],
-                                                            style={"display": "none"},
-                                                        ),
-                                                    ]
-                                                )
-                                            ]
-                                        ),
-                                        dbc.Col(
-                                            [
-                                                dbc.Row(
-                                                    [
-                                                        # Parameters
-                                                        html.Div(
-                                                            id="parameter",
-                                                            children=[
-                                                                html.Div(
-                                                                    id="exec-selection",
-                                                                    children=[
-                                                                        dcc.Dropdown(
-                                                                            id="select"
-                                                                            "ed-exec",
-                                                                            options=[],
-                                                                            value=[],
-                                                                        )
-                                                                    ],
-                                                                    style={
-                                                                        "display": ""
-                                                                        "none"
-                                                                    },
-                                                                ),
-                                                                html.Div(
-                                                                    id="parameter"
-                                                                    "-config"
-                                                                ),
-                                                                dbc.Button(
-                                                                    "Submit",
-                                                                    color="dark",
-                                                                    className="me-1",
-                                                                    id="button-submit",
-                                                                ),
-                                                            ],
-                                                        ),
-                                                        html.Br(),
-                                                        # Experiment Results
-                                                        html.Div(
-                                                            id="experiment-results"
-                                                        ),
-                                                    ]
+                                                dcc.Dropdown(
+                                                    id="selected-exec",
+                                                    options=[],
+                                                    value=[],
                                                 )
                                             ],
                                             style={"display": "none"},
@@ -558,25 +452,25 @@ def load_dataset(contents, filename):
     """
     if contents is None or filename is None:
         raise PreventUpdate
-
     # Get dataset
     dataset: dict = parse_contents(contents, filename)
     dataset_info: dict = dataset.get("task_info")
-    # task_type: str = dataset_info.get("task_type")
-
+    task_type: str = dataset_info.get("task_type")
+    dataset_information = html.H2(f"Task type: {task_type}")
     # Create and configure task
-    # main_task: Task = get_task(task_type)
+    main_task: Task = get_task(task_type)
     # Add experiment to DB
     exp = Experiment(**dataset_info)
     db.session.add(exp)
     db.session.commit()
-
+    exp_id = exp.id
     # Get and show available models
-    # available_models: list = main_task.get_compatible_models()
-    # options: list = [{"label": model, "value": model} for model in available_models]
-
+    available_models: list = main_task.get_compatible_models()
+    options: list = [{"label": model, "value": model} for model in available_models]
     # Make visible the execution-config div
-    # style = {}
+    style = {}
+
+    return dataset, exp_id, dataset_information, options, {"style": style}
 
 
 @app.callback(
@@ -592,10 +486,8 @@ def enable_parameters(executions):
     """
     if executions == []:
         raise PreventUpdate
-
     options = [{"label": sel_exec, "value": sel_exec} for sel_exec in executions]
     style = {}
-
     return options, {"style": style}, {"style": style}
 
 
@@ -621,8 +513,6 @@ def load_parameter_config(selected_exec):
 #    Input('algo', 'algo'))
 # def dummy(algo=None):
 #    return {}
-
-
 @app.callback(
     Output("experiment-results", "children"),
     [
@@ -643,7 +533,6 @@ def run_experiment(n_clicks, executions, dataset, exp_id, params_dict):
     # Create and configure task
     dataset_info = dataset["task_info"]
     main_task: Task = get_task(dataset_info["task_type"])
-
     # Set and run experiment
     main_task.set_executions(executions, params_dict)
     main_task.run_experiments(dataset)
