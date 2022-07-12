@@ -11,22 +11,7 @@
                     "type": "integer",
                     "default": 5,
                     "minimum": 1
-<<<<<<< HEAD
                 }
-=======
-                },
-                {
-                    "items": {
-                        "error_msg": "El parámetro 'k' debe ser de tipo entero mayor o igual a 1.",
-                        "description": "El parámetro 'k' es el número de vecinos que se consideran en cada input para la clasificación. Debe ser de tipo entero mayor o igual a 1.",
-                        "type": "integer",
-                        "default": 10,
-                        "minimum": 1
-                    },
-                    "type": "array"
-                }
-
->>>>>>> master
             ]
         },
         "weights": {
@@ -38,41 +23,17 @@
                     "default": "uniform",
                     "enum": ["uniform", "distance"]
                 }
-<<<<<<< HEAD
-=======
-
->>>>>>> master
             ]
         },
         "algorithm": {
             "oneOf": [
                 {
-<<<<<<< HEAD
                     "error_msg": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.",
                     "description": "El parámetro 'algorithm' debe ser 'auto', 'ball_tree', 'kd_tree', 'brute'.",
                     "type": "string",
                     "default": "auto",
                     "enum": ["auto", "ball_tree", "kd_tree", "brute"]
                 }
-=======
-                    "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                    "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.",
-                    "type": "integer",
-                    "default": 0,
-                    "minimum": 0
-                },
-                {
-                    "items": {
-                        "error_msg": "El parámetro 'ignore_first_neighbours' debe ser de tipo entero mayor o igual a 0.",
-                        "description": "El parámetro 'ignore_first_neighbours' permite ignorar los primeros vecinos. Debe ser de tipo entero mayor o igual a 0.",
-                        "type": "integer",
-                        "default": 0,
-                        "minimum": 0
-                    },
-                    "type": "array"
-                }
-
->>>>>>> master
             ]
         }
     },
