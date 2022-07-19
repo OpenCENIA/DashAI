@@ -6,8 +6,8 @@
         "numeric_classifier": {
             "oneOf": [
                 {
-                    "error_msg": "El parámetro 'numeric_classifier' debe ser un model que implemente la clase NumericClassificationModel.",
-                    "description": "El parámetro 'numeric_classifier' debe ser un model que implemente la clase NumericClassificationModel.",
+                    "error_msg": "El parámetro 'numeric_classifier' debe ser un modelo que implemente la clase NumericClassificationModel.",
+                    "description": "El parámetro 'numeric_classifier' debe ser un modelo que implemente la clase NumericClassificationModel.",
                     "type": "class",
                     "parent": "NumericClassificationModel"
                 }
@@ -16,10 +16,32 @@
         "tokenizer": {
             "oneOf": [
                 {
-                    "error_msg": "El parámetro 'tokenizer' debe ser un objeto de tipo tokenizer.",
-                    "description": "El parámetro 'tokenizer' permite seleccionar el tokenizador que usara el modelo.",
+                    "error_msg": "El parametro 'tokenizer' debe ser un modelo que implemente la clase Tokenizer.",
+                    "description": "Tokenizador a ser utilizado para procesar texto.",
                     "type": "class",
                     "parent": "Tokenizer"
+                }
+            ]
+        },
+        "ngram_min_n": {
+            "oneOf": [
+                {
+                    "error_msg": "Se debe ingresar un número entero mayor o igual a 1",
+                    "description": "Menor n_gram a utilizar en el vectorizador",
+                    "type": "integer",
+                    "minimum": 1,
+                    "deafult": 1
+                }
+            ]
+        },
+        "ngram_max_n": {
+            "oneOf": [
+                {
+                    "error_msg": "Se debe ingresar un número entero mayor o igual a 1",
+                    "description": "Mayor n_gram a utilizar en el vectorizador",
+                    "type": "integer",
+                    "minimum": 1,
+                    "deafult": 1
                 }
             ]
         }

@@ -1,7 +1,11 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 
 # version == 1.0.0
 class Tokenizer(metaclass=ABCMeta):
-    def tok(self, s):
-        return s
+    @abstractmethod
+    def __call__(self, text):
+        """
+        Convert text of type string in a token.
+        """
+        pass
