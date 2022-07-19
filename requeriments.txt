@@ -1,4 +1,5 @@
 dash==2.3.1
 dash-bootstrap-components==1.1.0
+nltk==3.7
 SQLAlchemy==1.4.36
 scikit-learn==1.0.2
