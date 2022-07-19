@@ -34,12 +34,31 @@ class Task(ABC):
         in the params[model] dictionary.
         The executions were temporaly save in self.executions.
         """
+        def parse_params(model_json, model_params):
+            """
+            Generate model's parameter dictionary, instantiating recursive
+            parameters.
+            """
+            execution_params = {}
+            for json_param in model_json:
+                if model_json.get(json_param)["oneOf"][0].get("type") == "class":
+                    param_choice = model_params[json_param].pop("choice") # TODO See how to get the user choice
+                    param_class = filter_by_parent(model_json.get(json_param)["oneOf"][0].get("parent")).get(param_choice)
+                    param_sub_params = parse_params(param_class.SCHEMA.get("properties"), model_params[json_param])
+                    execution_params[json_param] = param_class(**param_sub_params)
+                else:
+                    execution_params[json_param] = model_params[json_param]
+            return execution_params
         # TODO
+        # Remove models from the method signature
         # Generate a Grid to search the best model
         self.executions: list = []
-        for model in models:
-            actualExecution = self.compatible_models[model]
-            self.executions.append(actualExecution(**params[model]))
+        for model,model_params in params:
+            execution = self.compatible_models[model]
+            model_json = execution.SCHEMA.get("properties")
+            # TODO use JSON_SCHEMA to check user params
+            execution_params = parse_params(model_json, model_params)
+            self.executions.append(execution(**execution_params))
 
     def run_experiments(self, input_data: dict):
         """
