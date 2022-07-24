@@ -56,7 +56,6 @@ def gen_input(
     model_name: str,
     param_name: str,
     param_json_schema: dict,
-    parent_model_data: dict = None,
     level: int = 0
 ):
     """
@@ -318,7 +317,10 @@ def display_recursive_parameter_form(
             mapped_option = (
                 tokenizer_map[option] if option in tokenizer_map.keys() else option
             )
-            f = open(f"Models/parameters/models_schemas/{mapped_option}.json")
+            try:
+                f = open(f"Models/parameters/models_schemas/{mapped_option}.json")
+            except:
+                f = open(f"Models/parameters/models_schemas/{mapped_option.lower()}.json")
             accordion_item_form = dbc.AccordionItem(
                 [
                     gen_input(
@@ -392,15 +394,18 @@ def store_parameters(
         default_params_dict = {}
         for sel_exec in executions:
             sel_exec_default_params = {}
-            with open(f"Models/parameters/models_schemas/{sel_exec}.json") as f:
-                param_json_schema = json.load(f)
-                for param in param_json_schema.get("properties").keys():
-                    sel_exec_default_params[param] = (
-                        param_json_schema.get("properties")
-                        .get(param)
-                        .get("oneOf")[0]
-                        .get("default")
-                    )
+            try:
+                f = open(f"Models/parameters/models_schemas/{sel_exec}.json")
+            except:
+                f = open(f"Models/parameters/models_schemas/{sel_exec.lower()}.json")
+            param_json_schema = json.load(f)
+            for param in param_json_schema.get("properties").keys():
+                sel_exec_default_params[param] = (
+                    param_json_schema.get("properties")
+                    .get(param)
+                    .get("oneOf")[0]
+                    .get("default")
+                )
             default_params_dict[sel_exec] = sel_exec_default_params
         return default_params_dict#, str(default_params_dict)
 
@@ -531,8 +536,10 @@ def load_parameter_config(selected_exec):
     """
     if selected_exec == []:
         raise PreventUpdate
-
-    f = open(f"Models/parameters/models_schemas/{selected_exec}.json")
+    try:
+        f = open(f"Models/parameters/models_schemas/{selected_exec}.json")
+    except:
+        f = open(f"Models/parameters/models_schemas/{selected_exec.lower()}.json")
     children = gen_input(selected_exec, selected_exec, json.load(f))
     return children, [], {"style": {}}
 
