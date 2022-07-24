@@ -57,6 +57,7 @@ def gen_input(
     param_name: str,
     param_json_schema: dict,
     parent_model_data: dict = None,
+    level: int = 0
 ):
     """
     Maps a parameter of a model to a dash input
@@ -64,13 +65,10 @@ def gen_input(
     param_type = param_json_schema.get("type")
     param_default = param_json_schema.get("default", None)
     input_component = None
-    id_dict = dict(type="form-input", name=f"{model_name}--{param_name}")
-    label_id_dict = dict(type="form-label", name=f"{model_name}--{param_name}")
-    if parent_model_data is not None:
-        id_dict["model"] = parent_model_data["model"]
-        id_dict["model_parameter"] = parent_model_data["parameter"]
-        label_id_dict["model"] = parent_model_data["model"]
-        label_id_dict["model_parameter"] = parent_model_data["parameter"]
+
+    id_dict = dict(type="form-input", name=f"{model_name}--{param_name}", level=level)
+    label_id_dict = dict(type="form-label", name=f"{model_name}--{param_name}", level=level)
+
     if param_type == "string":
         input_component = dcc.Dropdown(
             id=id_dict,
@@ -110,13 +108,14 @@ def gen_input(
                     model_name,
                     param,
                     param_json_schema.get("properties").get(param).get("oneOf")[0],
-                    parent_model_data=parent_model_data,
+                    level=level,
                 )
                 for param in param_json_schema.get("properties").keys()
             ],
         )
 
     elif param_type == "class":
+        label_id_dict["type"] = "recursive-parameter-label"
         parent_class_name = param_json_schema.get("parent")
         input_component = html.Div(
             children=[
@@ -126,6 +125,7 @@ def gen_input(
                             id=dict(
                                 type="recursive-parameter-dropdown",
                                 name=f"{model_name}--{param_name}",
+                                level=level
                             ),
                             options=[
                                 {"label": opt, "value": opt}
@@ -158,7 +158,7 @@ app.layout = html.Div(
     [
         dbc.Row(
             [
-                # html.Div(id='test-parameters', children = [html.H2()]),
+                html.Div(id='test-parameters', children = [html.H2()]),
                 dbc.Col(
                     [
                         dbc.Row(
@@ -270,11 +270,18 @@ app.layout = html.Div(
 )
 
 
+#dictionary to map the names from the dropdown and the names in the json schema
+#used in the following callbacks: - display_recursive_parameter_form
+#                                 - store_parameters
+##############################################################################
+tokenizer_map = {"NormalTokenizer": "normalTok", "TweetTokenizer": "tweetTok"}
+##############################################################################
+
 @app.callback(
     Output(dict(type="recursive-parameter-accordion", name=ALL), "children"),
     [
-        Input(dict(type="recursive-parameter-dropdown", name=ALL), "value"),
-        Input(dict(type="recursive-parameter-dropdown", name=ALL), "id"),
+        Input(dict(type="recursive-parameter-dropdown", name=ALL, level=ALL), "value"),
+        Input(dict(type="recursive-parameter-dropdown", name=ALL, level=ALL), "id"),
     ],
     State(dict(type="recursive-parameter-accordion", name=ALL), "children"),
     prevent_initial_call=True,
@@ -288,8 +295,8 @@ def display_recursive_parameter_form(
     Get the selected option for all recursive parameters dropdowns and display
     the forms to configure each one of them.
     """
-    # dictionary to map the names from the dropdown and the names in the json schema
-    tokenizer_map = {"NormalTokenizer": "normalTok", "TweetTokenizer": "tweetTok"}
+    #dictionary to map the names from the dropdown and the names in the json schema
+    #tokenizer_map = {"NormalTokenizer": "normalTok", "TweetTokenizer": "tweetTok"}
 
     # get the component that triggered the callback
     triggered = callback_context.triggered[-1]["prop_id"]
@@ -300,67 +307,88 @@ def display_recursive_parameter_form(
     ):
         # update only the form of the component that triggered the callback
         if id == triggered_id:
+
+            try:
+                string_int = id["level"]
+                level = int(string_int)
+            except ValueError:
+                print(f"{string_int} in id: {id} is not an integer")
+                break
+
             mapped_option = (
                 tokenizer_map[option] if option in tokenizer_map.keys() else option
             )
             f = open(f"Models/parameters/models_schemas/{mapped_option}.json")
-            name = id["name"].split("--")
             accordion_item_form = dbc.AccordionItem(
                 [
                     gen_input(
                         mapped_option,
                         mapped_option,
                         json.load(f),
-                        parent_model_data={"model": name[0], "parameter": name[1]},
+                        level=level+1
                     )
                 ],
                 title=f"{mapped_option} parameters",
             )
+    
+
             prev_rec_parameters_forms[i] = accordion_item_form
 
     return prev_rec_parameters_forms
 
 
 @app.callback(
-    Output("params-dict", "data"),
+    Output('params-dict', 'data'),
     # Output('test-parameters', 'children'),
     [
-        Input("button-submit", component_property="n_clicks"),
-        Input("executions", "value"),
+        Input('button-submit', component_property='n_clicks'),
+        Input('executions', 'value')
     ],
     [
-        State(dict(type="form-input", name=ALL), "value"),
-        State(dict(type="form-label", name=ALL), "children"),
         State(
-            dict(type="form-input", model=ALL, model_parameter=ALL, name=ALL), "value"
+            dict(type='form-input', name=ALL, level=ALL), 'value'
         ),
         State(
-            dict(type="form-label", model=ALL, model_parameter=ALL, name=ALL),
-            "children",
+            dict(type='form-label', name=ALL, level=ALL), 'children'
         ),
-        State(dict(type="form-input", model=ALL, model_parameter=ALL, name=ALL), "id"),
-        State("params-dict", "data"),
+        State(
+            dict(type='form-input', name=ALL, level=ALL), 'id'
+        ),
+        State(
+            dict(type="recursive-parameter-dropdown", name=ALL, level=ALL), 'value'
+        ),
+        State(
+            dict(type="recursive-parameter-label", name=ALL, level=ALL), 'children'
+        ),
+        State(
+            dict(type="recursive-parameter-dropdown", name=ALL, level=ALL), 'id'
+        ),
+        State('params-dict', 'data')
     ],
-    prevent_initial_call=True,
+    prevent_initial_call=True
 )
 def store_parameters(
     n_clicks,
     executions,
     values,
     labels,
+    ids,
     rec_params_values,
     rec_params_labels,
     rec_params_ids,
-    prev_params_dict,
+    prev_params_dict
 ):
     """
     Get and store default parameters when a model is selected.
     Retrieve and store parameters configured by the user.
     """
 
-    # Store in "params-dict" the default values for the parameters
-    # of each selected model.
-    if callback_context.triggered[0]["prop_id"] == "executions.value":
+    def is_recursive_parameter(label: str):
+        return label in rec_params_labels
+    
+    #Store in "params-dict" the default values for the parameters of each selected model
+    #when the element that triggered the callback is the executions dropdown
+    if callback_context.triggered[-1]['prop_id'] == 'executions.value':
         default_params_dict = {}
         for sel_exec in executions:
             sel_exec_default_params = {}
@@ -374,77 +402,77 @@ def store_parameters(
                         .get("default")
                     )
             default_params_dict[sel_exec] = sel_exec_default_params
-        return default_params_dict  # , str(default_params_dict)
+        return default_params_dict#, str(default_params_dict)
 
-    # Retrieve and store parameters defined by the user when "Save" button is pressed.
-    elif callback_context.triggered[0]["prop_id"] == "button-submit.n_clicks":
-        params_dict = {}
-        for label, value in zip(labels[1:], values[1:]):
-            params_dict[label[:-2]] = value
-        output_params_dict = {}
-        if prev_params_dict is None:
-            output_params_dict = {labels[0][:-2]: params_dict}
-        else:
-            prev_params_dict[labels[0][:-2]] = params_dict
-            output_params_dict = prev_params_dict
+    #Retrieve and store parameters selected by the user when "Save" button is pressed.
+    #when the element that triggered the callback is the "Save" button
+    elif callback_context.triggered[-1]['prop_id'] == 'button-submit.n_clicks':
+        
+        # merge the lists of normal and recursive paramteters 
+        values += rec_params_values
+        labels += rec_params_labels
+        ids += rec_params_ids
 
-        # recursive parameters
+        #parse parameter lists (values, labels, ids)
+        levels = {}
+        for value, label, id in zip(values, labels, ids):
+            try:
+                string_int = id["level"]
+                level = int(string_int)
+            except ValueError:
+                print(f"{string_int} in id: {id} is not an integer")
+                break
 
-        if (
-            len(rec_params_values) > 0
-            and len(rec_params_ids) > 0
-            and len(rec_params_labels) > 0
-        ):
-            rec_parameters_dict = {}
-            rec_param_name = rec_params_labels[0][:-2]
-            model = rec_params_ids[0]["model"]
-            param_name_in_model = rec_params_ids[0]["model_parameter"]
+            try:
+                model, param = id["name"].split("--")
+            except ValueError:
+                name = id["name"]
+                print(f"name: {name} from id: {id} is not of the form <model>--<parameter>")
+                break
+            
+            if model != param:
+                param_data = (label, value, model, param)
+                if level in levels.keys():
+                    levels[level].append(param_data)
+                else:
+                    levels[level] = [param_data]
+            else:
+                continue
 
-            for id, value, label in zip(
-                rec_params_ids, rec_params_values, rec_params_labels
-            ):
-                name = id["name"].split("--")
-                # this condition refers to when "gen_input" creates a label for the
-                # model as it was another parameter, then "model_name" (name[0]) has
-                # the same value as "param_name" (name[1]) and that is used to mark
-                # the first parameter of a recursive parameter form.
-                if len(name) == 2 and name[0] == name[1]:
-                    # if rec_parameters_dict is not an empty dict ({})
-                    if rec_parameters_dict:
-                        output_params_dict[model][param_name_in_model] = {
-                            "value": rec_param_name,
-                            "parameters": rec_parameters_dict,
-                        }
+        #construction of parameters dict
+        previous_level_parameters = {}
+        for level in sorted(levels.keys(), reverse = True):
+            parameters = {}
+            for label, value, model, param in levels[level]:
+                if is_recursive_parameter(label):
+                        mapped_value = tokenizer_map[value] if value in tokenizer_map.keys() else value
+                        value = previous_level_parameters[mapped_value] if mapped_value != 'None' else None
 
-                    # resets the values to add the next recursive parameter form.
-                    rec_parameters_dict = {}
-                    rec_param_name = name[0]
-                    param_name_in_model = id["model_parameter"]
-                    continue
+                if level > 0:
+                    if model in parameters.keys():
+                        parameters[model]["parameters"][param] = value
+                    else:
+                        parameters[model] = {"value": model, "parameters": {param: value}}
+                else:
+                    parameters[param] = value
+            previous_level_parameters  = parameters
 
-                rec_parameters_dict[label[:-2]] = value
+        #assuming every parameter in level 0 has the model (e.g NumericalWrapperForText) as its parent        
+        model_name = levels[0][0][2]
 
-            # last recursive parameter form is never added in the previous
-            # for loop so it needs to be added after the for loop ends.
-            output_params_dict[model][param_name_in_model] = {
-                "value": rec_param_name,
-                "parameters": rec_parameters_dict,
-            }
+        prev_params_dict = {} if prev_params_dict is None else prev_params_dict
 
-        return output_params_dict  # , str(output_params_dict)
+        prev_params_dict[model_name] = parameters
 
-
-@app.callback(
-    [
-        Output("dataset", "data"),
-        Output("experiment-id", "data"),
-        Output("dataset-info", "children"),
-        Output("executions", "options"),
-        Output("execution-config", "style"),
-    ],
-    Input("upload-data", "contents"),
-    State("upload-data", "filename"),
-)
+        return prev_params_dict#, str(prev_params_dict)       
+        
+@app.callback([Output('dataset', 'data'),
+    Output('experiment-id', 'data'),
+    Output('dataset-info', 'children'),
+    Output('executions','options'),
+    Output('execution-config','style')],
+    Input('upload-data', 'contents'),
+    State('upload-data', 'filename'))
 def load_dataset(contents, filename):
     """
     Receive the upload data input and stores in dataset.
